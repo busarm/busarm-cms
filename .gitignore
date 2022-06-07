@@ -1,0 +1,14 @@
+.Python
+*.pyc
+*.idea/
+*__pycache__/
+
+.env
+.logs/
+.serverless/
+.adminjs/
+node_modules/
+tmp/
+dist/
+
+package-lock.json
