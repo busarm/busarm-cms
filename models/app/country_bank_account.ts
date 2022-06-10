@@ -4,6 +4,7 @@ import type { AppCountry, AppCountryId } from './app_country';
 import type { BankAccount, BankAccountId } from './bank_account';
 
 export interface CountryBankAccountAttributes {
+  id: number;
   countryCode: string;
   accountId: number;
   isActive?: number;
@@ -11,12 +12,13 @@ export interface CountryBankAccountAttributes {
   updatedAt?: Date;
 }
 
-export type CountryBankAccountPk = "countryCode" | "accountId";
+export type CountryBankAccountPk = "id";
 export type CountryBankAccountId = CountryBankAccount[CountryBankAccountPk];
-export type CountryBankAccountOptionalAttributes = "isActive" | "createdAt" | "updatedAt";
+export type CountryBankAccountOptionalAttributes = "id" | "isActive" | "createdAt" | "updatedAt";
 export type CountryBankAccountCreationAttributes = Optional<CountryBankAccountAttributes, CountryBankAccountOptionalAttributes>;
 
 export class CountryBankAccount extends Model<CountryBankAccountAttributes, CountryBankAccountCreationAttributes> implements CountryBankAccountAttributes {
+  id!: number;
   countryCode!: string;
   accountId!: number;
   isActive?: number;
@@ -36,10 +38,15 @@ export class CountryBankAccount extends Model<CountryBankAccountAttributes, Coun
 
   static initModel(sequelize: Sequelize.Sequelize): typeof CountryBankAccount {
     return sequelize.define('CountryBankAccount', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     countryCode: {
       type: DataTypes.CHAR(5),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_countries',
         key: 'country_code'
@@ -49,7 +56,6 @@ export class CountryBankAccount extends Model<CountryBankAccountAttributes, Coun
     accountId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'bank_accounts',
         key: 'account_id'
@@ -79,6 +85,14 @@ export class CountryBankAccount extends Model<CountryBankAccountAttributes, Coun
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "country_code_2",
         unique: true,
         using: "BTREE",
         fields: [

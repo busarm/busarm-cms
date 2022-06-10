@@ -11,7 +11,7 @@ import adminjs, { RecordActionResponse } from "adminjs";
  * @param {AccessPermissions} modifyPermission
  * @returns {Resource}
  */
-export const CmsSessionsResource = (
+export const LogSessionResource = (
     id: string,
     model: ModelStatic<Model>,
     order: number = 0,
@@ -32,8 +32,8 @@ export const CmsSessionsResource = (
                     ...resource.options?.actions?.show,
                     after: async (response: RecordActionResponse): Promise<RecordActionResponse> => {
                         try {
-                            if (response.record.params.data) {
-                                response.record.params.data = JSON.parse(response.record.params.data);
+                            if (response.record.params.sessionValue) {
+                                response.record.params.sessionValue = JSON.parse(response.record.params.sessionValue);
                             }
                         } catch (error) {
                             console.log(error);
@@ -54,8 +54,8 @@ export const CmsSessionsResource = (
             },
             properties: {
                 ...resource.options?.properties,
-                data: {
-                    ...resource.options?.properties.data,
+                sessionValue: {
+                    ...resource.options?.properties.sessionValue,
                     isVisible: {
                         show: true,
                         filter: true,
@@ -64,9 +64,6 @@ export const CmsSessionsResource = (
                     },
                     isArray: false,
                     components: {
-                        // filter: adminjs.bundle(
-                        //     "../../components/props/FilterText"
-                        // ),
                         show: adminjs.bundle("../../components/props/ViewJSON"),
                     },
                 },

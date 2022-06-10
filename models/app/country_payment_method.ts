@@ -4,6 +4,7 @@ import type { AppCountry, AppCountryId } from './app_country';
 import type { AppPaymentMethod, AppPaymentMethodId } from './app_payment_method';
 
 export interface CountryPaymentMethodAttributes {
+  id: number;
   countryCode: string;
   methodId: number;
   fees?: number;
@@ -17,12 +18,13 @@ export interface CountryPaymentMethodAttributes {
   updatedAt?: Date;
 }
 
-export type CountryPaymentMethodPk = "countryCode" | "methodId";
+export type CountryPaymentMethodPk = "id";
 export type CountryPaymentMethodId = CountryPaymentMethod[CountryPaymentMethodPk];
-export type CountryPaymentMethodOptionalAttributes = "fees" | "feesPercent" | "transferFee" | "transferFeePercent" | "transferMinimum" | "transferType" | "isActive" | "createdAt" | "updatedAt";
+export type CountryPaymentMethodOptionalAttributes = "id" | "fees" | "feesPercent" | "transferFee" | "transferFeePercent" | "transferMinimum" | "transferType" | "isActive" | "createdAt" | "updatedAt";
 export type CountryPaymentMethodCreationAttributes = Optional<CountryPaymentMethodAttributes, CountryPaymentMethodOptionalAttributes>;
 
 export class CountryPaymentMethod extends Model<CountryPaymentMethodAttributes, CountryPaymentMethodCreationAttributes> implements CountryPaymentMethodAttributes {
+  id!: number;
   countryCode!: string;
   methodId!: number;
   fees?: number;
@@ -48,10 +50,15 @@ export class CountryPaymentMethod extends Model<CountryPaymentMethodAttributes, 
 
   static initModel(sequelize: Sequelize.Sequelize): typeof CountryPaymentMethod {
     return sequelize.define('CountryPaymentMethod', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     countryCode: {
       type: DataTypes.CHAR(5),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_countries',
         key: 'country_code'
@@ -61,7 +68,6 @@ export class CountryPaymentMethod extends Model<CountryPaymentMethodAttributes, 
     methodId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_payment_methods',
         key: 'method_id'
@@ -120,6 +126,14 @@ export class CountryPaymentMethod extends Model<CountryPaymentMethodAttributes, 
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "country_code_2",
         unique: true,
         using: "BTREE",
         fields: [

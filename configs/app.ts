@@ -1,3 +1,4 @@
+import pkg from '../package.json';
 export enum ENV {
     PROD = "production",
     TEST = "testing",
@@ -21,6 +22,7 @@ function getEnv(): ENV {
 }
 export default {
     env: getEnv(),
+    version: pkg.version,
     server: {
         name: process.env.APP_NAME || "CMS APP",
         company: process.env.APP_COMPANY || "CMS",

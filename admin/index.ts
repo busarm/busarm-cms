@@ -9,9 +9,9 @@ import { Models, ModifyPermissions, ViewPermissions } from "../bootstrap/databas
 import { Resource, ModelResource, Nav } from "./resource";
 import { Utils } from "./helpers/utils";
 import { Action } from "./helpers/actions";
-import { Options } from "./helpers/session";
-import { authenticate, checkAuth } from "../services/AuthService";
-import { checkAdmin, createAdmin } from "../services/AdminUserService";
+import { getSessionOption } from "./helpers/session";
+import { authenticate, checkAuth } from "./services/AuthService";
+import { checkAdmin, createAdmin } from "./services/AdminUserService";
 import { AccessRoles, RolePermissions } from "./helpers/roles";
 
 // Register sequelize adapter to handle sequelize db
@@ -34,7 +34,7 @@ const init = async (adminJs: AdminJS): Promise<Router> => {
     const router = express.Router();
 
     // Create default admin if none exist
-    if (config.admin.username && config.admin.password && !checkAdmin()) {
+    if (config.admin.username && config.admin.password && !(await checkAdmin())) {
         createAdmin(config.admin.username, config.admin.username, AccessRoles.ADMINISTRATOR);
     }
 
@@ -64,7 +64,7 @@ const init = async (adminJs: AdminJS): Promise<Router> => {
             maxRetries: 5,
         },
         router,
-        Options
+        getSessionOption()
     );
 };
 
@@ -152,6 +152,13 @@ export default async (path: string, app: Application): Promise<Application> => {
                 styles: ["/assets/css/app.css"],
                 scripts: ["/assets/js/app.js"],
             },
+            settings: {
+                defaultPerPage: config.pagination.per_page
+            },
+            version: {
+                admin: true,
+                app: config.version
+            }
         });
         const adminJsRouter = await init(adminJs);
 
@@ -170,7 +177,6 @@ export default async (path: string, app: Application): Promise<Application> => {
                 // Is not authenticated
                 const authUser = await checkAuth(req);
                 if (!authUser) {
-                    // TODO Add Log failure action
                     req.session.adminUser = null;
                     if (req.path.startsWith(adminJs.options.rootPath.replace(/\/$/, "") + "/frontend")) {
                         return res.status(401).send();
@@ -180,8 +186,6 @@ export default async (path: string, app: Application): Promise<Application> => {
                     ) {
                         return res.redirect(adminJs.options.logoutPath);
                     }
-                } else {
-                    // res.cookie('username', )
                 }
             }
             return next();

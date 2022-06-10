@@ -73,7 +73,7 @@ export class AccessLog extends Model<AccessLogAttributes, AccessLogCreationAttri
       field: 'session_token'
     },
     ip: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(30),
       allowNull: false
     },
     lat: {

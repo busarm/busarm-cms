@@ -35,18 +35,6 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
   createdAt!: Date;
   updatedAt?: Date;
 
-  // AppBus belongsToMany AppPartner via busId and partnerId
-  partnerIdAppPartnersPartnerSharedBuses!: AppPartner[];
-  getPartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManyGetAssociationsMixin<AppPartner>;
-  setPartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManySetAssociationsMixin<AppPartner, AppPartnerId>;
-  addPartnerIdAppPartnersPartnerSharedBus!: Sequelize.BelongsToManyAddAssociationMixin<AppPartner, AppPartnerId>;
-  addPartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManyAddAssociationsMixin<AppPartner, AppPartnerId>;
-  createPartnerIdAppPartnersPartnerSharedBus!: Sequelize.BelongsToManyCreateAssociationMixin<AppPartner>;
-  removePartnerIdAppPartnersPartnerSharedBus!: Sequelize.BelongsToManyRemoveAssociationMixin<AppPartner, AppPartnerId>;
-  removePartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppPartner, AppPartnerId>;
-  hasPartnerIdAppPartnersPartnerSharedBus!: Sequelize.BelongsToManyHasAssociationMixin<AppPartner, AppPartnerId>;
-  hasPartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManyHasAssociationsMixin<AppPartner, AppPartnerId>;
-  countPartnerIdAppPartnersPartnerSharedBuses!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppBus hasMany BusImage via busId
   busImages!: BusImage[];
   getBusImages!: Sequelize.HasManyGetAssociationsMixin<BusImage>;

@@ -1,9 +1,9 @@
 import CryptoJS from "crypto-js";
 import { Request } from "express";
-import { Models } from "../bootstrap/database";
-import { AccessCredential } from "../models/access/access_credential";
-import { CanAdmin } from "../admin/helpers/permissions";
-import { RolePermissions } from "../admin/helpers/roles";
+import { Models } from "../../bootstrap/database";
+import { AccessCredential } from "../../models/access/access_credential";
+import { CanAdmin } from "../helpers/permissions";
+import { RolePermissions } from "../helpers/roles";
 import { CurrentAdmin } from "adminjs";
 
 /**

@@ -1,4 +1,6 @@
-import { ActionRequest, flat, PropertyOptions, ResourceOptions, ResourceWithOptions } from "adminjs";
+
+import config from "../configs/app";
+import { flat, PropertyOptions, ResourceOptions, ResourceWithOptions } from "adminjs";
 import { CanView, CanModify, AccessPermissions } from "./helpers/permissions";
 import { DataTypes, Model, ModelStatic } from "sequelize";
 import { OauthJti } from "../models/oauth/oauth_jti";
@@ -9,9 +11,8 @@ import { OauthUser } from "../models/oauth/oauth_user";
 import { OauthUserResource } from "./resources/oauth/oauth_user";
 import { AccessCredential } from "../models/access/access_credential";
 import { AccessCredentialsResource } from "./resources/access/access_credentials";
-import config from "../configs/app";
-import { CmsSessionsResource } from "./resources/access/cms_sessions";
-import { CmsSession } from "../models/access/cms_session";
+import { LogSession } from "../models/access/log_session";
+import { LogSessionResource } from "./resources/access/log_session";
 
 export interface Resource extends ResourceWithOptions {
     resource: ModelStatic<Model>;
@@ -63,8 +64,8 @@ export function ModelResource(
                 AccessPermissions.VIEW_ACCESS_USER,
                 AccessPermissions.MODIFY_ACCESS_USER
             );
-        case CmsSession.name:
-            return CmsSessionsResource(
+        case LogSession.name:
+            return LogSessionResource(
                 id,
                 model,
                 order,
@@ -122,7 +123,7 @@ export const DefaultResource = (
         const isRequired = isId || !attr.allowNull;
         const canShow = !["password", "salt", "secret", "client_secret", "private_key"].includes(attr.field);
         const canEdit =
-            !attr.primaryKey &&
+            !(attr.primaryKey && attr.autoIncrement) &&
             ![
                 "password",
                 "salt",
@@ -156,7 +157,7 @@ export const DefaultResource = (
             },
             position: 100 + (index + 1),
         };
-        if (attr.type.constructor.name != DataTypes.TEXT.name || length <= 1024) {
+        if (attr.type.constructor.name === DataTypes.TEXT.name || length >= 1024) {
             props[key].type = "textarea";
         }
         listCount = listCount + Number(canList);

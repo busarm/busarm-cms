@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { AccessLog, AccessLogId } from './access_log';
 
 export interface LogSessionAttributes {
+  id: number;
   accessId: number;
   sessionKey: string;
   sessionValue?: string;
@@ -10,12 +11,13 @@ export interface LogSessionAttributes {
   updatedAt?: Date;
 }
 
-export type LogSessionPk = "accessId" | "sessionKey";
+export type LogSessionPk = "id";
 export type LogSessionId = LogSession[LogSessionPk];
-export type LogSessionOptionalAttributes = "sessionValue" | "createdAt" | "updatedAt";
+export type LogSessionOptionalAttributes = "id" | "sessionValue" | "createdAt" | "updatedAt";
 export type LogSessionCreationAttributes = Optional<LogSessionAttributes, LogSessionOptionalAttributes>;
 
 export class LogSession extends Model<LogSessionAttributes, LogSessionCreationAttributes> implements LogSessionAttributes {
+  id!: number;
   accessId!: number;
   sessionKey!: string;
   sessionValue?: string;
@@ -30,10 +32,15 @@ export class LogSession extends Model<LogSessionAttributes, LogSessionCreationAt
 
   static initModel(sequelize: Sequelize.Sequelize): typeof LogSession {
     return sequelize.define('LogSession', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     accessId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'access_log',
         key: 'access_id'
@@ -43,7 +50,6 @@ export class LogSession extends Model<LogSessionAttributes, LogSessionCreationAt
     sessionKey: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      primaryKey: true,
       field: 'session_key'
     },
     sessionValue: {
@@ -68,6 +74,14 @@ export class LogSession extends Model<LogSessionAttributes, LogSessionCreationAt
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "access_id",
         unique: true,
         using: "BTREE",
         fields: [

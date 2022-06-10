@@ -4,6 +4,7 @@ import type { AppBooking, AppBookingId } from './app_booking';
 import type { AppTicket, AppTicketId } from './app_ticket';
 
 export interface BookingTripTicketAttributes {
+  id: number;
   bookingId: string;
   ticketId: number;
   ticketTypeId: number;
@@ -12,12 +13,13 @@ export interface BookingTripTicketAttributes {
   updatedAt?: Date;
 }
 
-export type BookingTripTicketPk = "bookingId" | "ticketId" | "ticketTypeId";
+export type BookingTripTicketPk = "id";
 export type BookingTripTicketId = BookingTripTicket[BookingTripTicketPk];
-export type BookingTripTicketOptionalAttributes = "createdAt" | "updatedAt";
+export type BookingTripTicketOptionalAttributes = "id" | "createdAt" | "updatedAt";
 export type BookingTripTicketCreationAttributes = Optional<BookingTripTicketAttributes, BookingTripTicketOptionalAttributes>;
 
 export class BookingTripTicket extends Model<BookingTripTicketAttributes, BookingTripTicketCreationAttributes> implements BookingTripTicketAttributes {
+  id!: number;
   bookingId!: string;
   ticketId!: number;
   ticketTypeId!: number;
@@ -38,10 +40,15 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
 
   static initModel(sequelize: Sequelize.Sequelize): typeof BookingTripTicket {
     return sequelize.define('BookingTripTicket', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     bookingId: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_booking',
         key: 'booking_id'
@@ -51,13 +58,11 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
     ticketId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       field: 'ticket_id'
     },
     ticketTypeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_tickets',
         key: 'ticket_type_id'
@@ -85,6 +90,14 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "booking_id",
         unique: true,
         using: "BTREE",
         fields: [

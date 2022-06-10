@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { AppCountry, AppCountryId } from './app_country';
 import type { AppTransaction, AppTransactionId } from './app_transaction';
 import type { CountryPaymentMethod, CountryPaymentMethodId } from './country_payment_method';
 
@@ -32,18 +31,6 @@ export class AppPaymentMethod extends Model<AppPaymentMethodAttributes, AppPayme
   createdAt!: Date;
   updatedAt?: Date;
 
-  // AppPaymentMethod belongsToMany AppCountry via methodId and countryCode
-  countryCodeAppCountriesCountryPaymentMethods!: AppCountry[];
-  getCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManyGetAssociationsMixin<AppCountry>;
-  setCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManySetAssociationsMixin<AppCountry, AppCountryId>;
-  addCountryCodeAppCountriesCountryPaymentMethod!: Sequelize.BelongsToManyAddAssociationMixin<AppCountry, AppCountryId>;
-  addCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManyAddAssociationsMixin<AppCountry, AppCountryId>;
-  createCountryCodeAppCountriesCountryPaymentMethod!: Sequelize.BelongsToManyCreateAssociationMixin<AppCountry>;
-  removeCountryCodeAppCountriesCountryPaymentMethod!: Sequelize.BelongsToManyRemoveAssociationMixin<AppCountry, AppCountryId>;
-  removeCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppCountry, AppCountryId>;
-  hasCountryCodeAppCountriesCountryPaymentMethod!: Sequelize.BelongsToManyHasAssociationMixin<AppCountry, AppCountryId>;
-  hasCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManyHasAssociationsMixin<AppCountry, AppCountryId>;
-  countCountryCodeAppCountriesCountryPaymentMethods!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppPaymentMethod hasMany AppTransaction via transactionMethod
   appTransactions!: AppTransaction[];
   getAppTransactions!: Sequelize.HasManyGetAssociationsMixin<AppTransaction>;

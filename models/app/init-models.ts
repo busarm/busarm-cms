@@ -314,16 +314,6 @@ export function initModels(sequelize: Sequelize) {
   const TripSeat = _TripSeat.initModel(sequelize);
   const UserBankAccount = _UserBankAccount.initModel(sequelize);
 
-  AppBooking.belongsToMany(AppTicket, { as: 'ticketTypeIdAppTickets', through: BookingTripTicket, foreignKey: "bookingId", otherKey: "ticketTypeId" });
-  AppBus.belongsToMany(AppPartner, { as: 'partnerIdAppPartnersPartnerSharedBuses', through: PartnerSharedBus, foreignKey: "busId", otherKey: "partnerId" });
-  AppCountry.belongsToMany(AppPaymentMethod, { as: 'methodIdAppPaymentMethods', through: CountryPaymentMethod, foreignKey: "countryCode", otherKey: "methodId" });
-  AppCountry.belongsToMany(BankAccount, { as: 'accountIdBankAccounts', through: CountryBankAccount, foreignKey: "countryCode", otherKey: "accountId" });
-  AppLocation.belongsToMany(AppPartner, { as: 'partnerIdAppPartners', through: PartnerLocation, foreignKey: "locId", otherKey: "partnerId" });
-  AppPartner.belongsToMany(AppBus, { as: 'busIdAppBuses', through: PartnerSharedBus, foreignKey: "partnerId", otherKey: "busId" });
-  AppPartner.belongsToMany(AppLocation, { as: 'locIdAppLocations', through: PartnerLocation, foreignKey: "partnerId", otherKey: "locId" });
-  AppPaymentMethod.belongsToMany(AppCountry, { as: 'countryCodeAppCountriesCountryPaymentMethods', through: CountryPaymentMethod, foreignKey: "methodId", otherKey: "countryCode" });
-  AppTicket.belongsToMany(AppBooking, { as: 'bookingIdAppBookings', through: BookingTripTicket, foreignKey: "ticketTypeId", otherKey: "bookingId" });
-  BankAccount.belongsToMany(AppCountry, { as: 'countryCodeAppCountries', through: CountryBankAccount, foreignKey: "accountId", otherKey: "countryCode" });
   AppTrip.belongsTo(AppAgent, { foreignKey: "agentId"});
   AppAgent.hasMany(AppTrip, { foreignKey: "agentId"});
   TripBus.belongsTo(AppAgent, { foreignKey: "partnerId"});

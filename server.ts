@@ -1,24 +1,26 @@
 require("dotenv").config();
 import express from "express";
-import session from "express-session";
+import useragent from "express-useragent";
 import compression from "compression";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import admin from "./admin";
 import config from "./configs/app";
-import { Options } from "./admin/helpers/session";
+import { aceessSession } from "./admin/helpers/session";
 
 // Init Express
 const app = express();
 
-app.use(session(Options));
+app.set('trust proxy', 1); // Trust proxy
+app.use(useragent.express());
 app.use(compression());
 app.use(cors({ origin: "*" }));
 app.use(helmet.frameguard({ action: "DENY" }));
 app.use(helmet.hidePoweredBy());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cookieParser(config.session.secret));
+app.use(aceessSession());
 app.use(express.static("public")); // Serve static files from /public
 
 // Setup Adminjs

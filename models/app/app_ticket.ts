@@ -1,12 +1,12 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { AppBooking, AppBookingId } from './app_booking';
 import type { AppCountry, AppCountryId } from './app_country';
 import type { AppTrip, AppTripId } from './app_trip';
 import type { BookingTripTicket, BookingTripTicketId } from './booking_trip_ticket';
 import type { TicketType, TicketTypeId } from './ticket_type';
 
 export interface AppTicketAttributes {
+  id: number;
   ticketId: number;
   ticketTypeId: number;
   ticketPrice: number;
@@ -16,12 +16,13 @@ export interface AppTicketAttributes {
   updatedAt?: Date;
 }
 
-export type AppTicketPk = "ticketId" | "ticketTypeId";
+export type AppTicketPk = "id";
 export type AppTicketId = AppTicket[AppTicketPk];
-export type AppTicketOptionalAttributes = "currencyCode" | "isActive" | "createdAt" | "updatedAt";
+export type AppTicketOptionalAttributes = "id" | "currencyCode" | "isActive" | "createdAt" | "updatedAt";
 export type AppTicketCreationAttributes = Optional<AppTicketAttributes, AppTicketOptionalAttributes>;
 
 export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttributes> implements AppTicketAttributes {
+  id!: number;
   ticketId!: number;
   ticketTypeId!: number;
   ticketPrice!: number;
@@ -35,18 +36,6 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
   getCurrencyCodeAppCountry!: Sequelize.BelongsToGetAssociationMixin<AppCountry>;
   setCurrencyCodeAppCountry!: Sequelize.BelongsToSetAssociationMixin<AppCountry, AppCountryId>;
   createCurrencyCodeAppCountry!: Sequelize.BelongsToCreateAssociationMixin<AppCountry>;
-  // AppTicket belongsToMany AppBooking via ticketTypeId and bookingId
-  bookingIdAppBookings!: AppBooking[];
-  getBookingIdAppBookings!: Sequelize.BelongsToManyGetAssociationsMixin<AppBooking>;
-  setBookingIdAppBookings!: Sequelize.BelongsToManySetAssociationsMixin<AppBooking, AppBookingId>;
-  addBookingIdAppBooking!: Sequelize.BelongsToManyAddAssociationMixin<AppBooking, AppBookingId>;
-  addBookingIdAppBookings!: Sequelize.BelongsToManyAddAssociationsMixin<AppBooking, AppBookingId>;
-  createBookingIdAppBooking!: Sequelize.BelongsToManyCreateAssociationMixin<AppBooking>;
-  removeBookingIdAppBooking!: Sequelize.BelongsToManyRemoveAssociationMixin<AppBooking, AppBookingId>;
-  removeBookingIdAppBookings!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppBooking, AppBookingId>;
-  hasBookingIdAppBooking!: Sequelize.BelongsToManyHasAssociationMixin<AppBooking, AppBookingId>;
-  hasBookingIdAppBookings!: Sequelize.BelongsToManyHasAssociationsMixin<AppBooking, AppBookingId>;
-  countBookingIdAppBookings!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppTicket hasMany AppTrip via ticketId
   appTrips!: AppTrip[];
   getAppTrips!: Sequelize.HasManyGetAssociationsMixin<AppTrip>;
@@ -79,16 +68,20 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
 
   static initModel(sequelize: Sequelize.Sequelize): typeof AppTicket {
     return sequelize.define('AppTicket', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     ticketId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       field: 'ticket_id'
     },
     ticketTypeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'ticket_types',
         key: 'ticket_type_id'
@@ -132,6 +125,14 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "ticket_id",
         unique: true,
         using: "BTREE",
         fields: [

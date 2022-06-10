@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppPromo, AppPromoId } from './app_promo';
 
 export interface TripPromoAttributes {
+  id: number;
   tripId: number;
   promoCode: string;
   startDate: Date;
@@ -11,12 +12,13 @@ export interface TripPromoAttributes {
   updatedAt?: Date;
 }
 
-export type TripPromoPk = "tripId" | "promoCode";
+export type TripPromoPk = "id";
 export type TripPromoId = TripPromo[TripPromoPk];
-export type TripPromoOptionalAttributes = "createdAt" | "updatedAt";
+export type TripPromoOptionalAttributes = "id" | "createdAt" | "updatedAt";
 export type TripPromoCreationAttributes = Optional<TripPromoAttributes, TripPromoOptionalAttributes>;
 
 export class TripPromo extends Model<TripPromoAttributes, TripPromoCreationAttributes> implements TripPromoAttributes {
+  id!: number;
   tripId!: number;
   promoCode!: string;
   startDate!: Date;
@@ -32,16 +34,20 @@ export class TripPromo extends Model<TripPromoAttributes, TripPromoCreationAttri
 
   static initModel(sequelize: Sequelize.Sequelize): typeof TripPromo {
     return sequelize.define('TripPromo', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     tripId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       field: 'trip_id'
     },
     promoCode: {
       type: DataTypes.STRING(10),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_promo',
         key: 'promo_code'
@@ -75,6 +81,14 @@ export class TripPromo extends Model<TripPromoAttributes, TripPromoCreationAttri
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "trip_id",
         unique: true,
         using: "BTREE",
         fields: [

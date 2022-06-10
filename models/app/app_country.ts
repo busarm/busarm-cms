@@ -2,12 +2,10 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppBooking, AppBookingId } from './app_booking';
 import type { AppBus, AppBusId } from './app_bus';
-import type { AppPaymentMethod, AppPaymentMethodId } from './app_payment_method';
 import type { AppProvince, AppProvinceId } from './app_province';
 import type { AppTicket, AppTicketId } from './app_ticket';
 import type { AppTransaction, AppTransactionId } from './app_transaction';
 import type { AppUser, AppUserId } from './app_user';
-import type { BankAccount, BankAccountId } from './bank_account';
 import type { CountryBankAccount, CountryBankAccountId } from './country_bank_account';
 import type { CountryPaymentMethod, CountryPaymentMethodId } from './country_payment_method';
 import type { TransactionPayinRequest, TransactionPayinRequestId } from './transaction_payin_request';
@@ -85,18 +83,6 @@ export class AppCountry extends Model<AppCountryAttributes, AppCountryCreationAt
   hasAppBus!: Sequelize.HasManyHasAssociationMixin<AppBus, AppBusId>;
   hasAppBuses!: Sequelize.HasManyHasAssociationsMixin<AppBus, AppBusId>;
   countAppBuses!: Sequelize.HasManyCountAssociationsMixin;
-  // AppCountry belongsToMany AppPaymentMethod via countryCode and methodId
-  methodIdAppPaymentMethods!: AppPaymentMethod[];
-  getMethodIdAppPaymentMethods!: Sequelize.BelongsToManyGetAssociationsMixin<AppPaymentMethod>;
-  setMethodIdAppPaymentMethods!: Sequelize.BelongsToManySetAssociationsMixin<AppPaymentMethod, AppPaymentMethodId>;
-  addMethodIdAppPaymentMethod!: Sequelize.BelongsToManyAddAssociationMixin<AppPaymentMethod, AppPaymentMethodId>;
-  addMethodIdAppPaymentMethods!: Sequelize.BelongsToManyAddAssociationsMixin<AppPaymentMethod, AppPaymentMethodId>;
-  createMethodIdAppPaymentMethod!: Sequelize.BelongsToManyCreateAssociationMixin<AppPaymentMethod>;
-  removeMethodIdAppPaymentMethod!: Sequelize.BelongsToManyRemoveAssociationMixin<AppPaymentMethod, AppPaymentMethodId>;
-  removeMethodIdAppPaymentMethods!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppPaymentMethod, AppPaymentMethodId>;
-  hasMethodIdAppPaymentMethod!: Sequelize.BelongsToManyHasAssociationMixin<AppPaymentMethod, AppPaymentMethodId>;
-  hasMethodIdAppPaymentMethods!: Sequelize.BelongsToManyHasAssociationsMixin<AppPaymentMethod, AppPaymentMethodId>;
-  countMethodIdAppPaymentMethods!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppCountry hasMany AppProvince via countryCode
   appProvinces!: AppProvince[];
   getAppProvinces!: Sequelize.HasManyGetAssociationsMixin<AppProvince>;
@@ -145,18 +131,6 @@ export class AppCountry extends Model<AppCountryAttributes, AppCountryCreationAt
   hasAppUser!: Sequelize.HasManyHasAssociationMixin<AppUser, AppUserId>;
   hasAppUsers!: Sequelize.HasManyHasAssociationsMixin<AppUser, AppUserId>;
   countAppUsers!: Sequelize.HasManyCountAssociationsMixin;
-  // AppCountry belongsToMany BankAccount via countryCode and accountId
-  accountIdBankAccounts!: BankAccount[];
-  getAccountIdBankAccounts!: Sequelize.BelongsToManyGetAssociationsMixin<BankAccount>;
-  setAccountIdBankAccounts!: Sequelize.BelongsToManySetAssociationsMixin<BankAccount, BankAccountId>;
-  addAccountIdBankAccount!: Sequelize.BelongsToManyAddAssociationMixin<BankAccount, BankAccountId>;
-  addAccountIdBankAccounts!: Sequelize.BelongsToManyAddAssociationsMixin<BankAccount, BankAccountId>;
-  createAccountIdBankAccount!: Sequelize.BelongsToManyCreateAssociationMixin<BankAccount>;
-  removeAccountIdBankAccount!: Sequelize.BelongsToManyRemoveAssociationMixin<BankAccount, BankAccountId>;
-  removeAccountIdBankAccounts!: Sequelize.BelongsToManyRemoveAssociationsMixin<BankAccount, BankAccountId>;
-  hasAccountIdBankAccount!: Sequelize.BelongsToManyHasAssociationMixin<BankAccount, BankAccountId>;
-  hasAccountIdBankAccounts!: Sequelize.BelongsToManyHasAssociationsMixin<BankAccount, BankAccountId>;
-  countAccountIdBankAccounts!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppCountry hasMany CountryBankAccount via countryCode
   countryBankAccounts!: CountryBankAccount[];
   getCountryBankAccounts!: Sequelize.HasManyGetAssociationsMixin<CountryBankAccount>;

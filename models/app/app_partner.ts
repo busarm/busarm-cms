@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppAgent, AppAgentId } from './app_agent';
 import type { AppBus, AppBusId } from './app_bus';
-import type { AppLocation, AppLocationId } from './app_location';
 import type { AppUser, AppUserId } from './app_user';
 import type { PartnerBankAccount, PartnerBankAccountCreationAttributes, PartnerBankAccountId } from './partner_bank_account';
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
@@ -67,30 +66,6 @@ export class AppPartner extends Model<AppPartnerAttributes, AppPartnerCreationAt
   hasAppBus!: Sequelize.HasManyHasAssociationMixin<AppBus, AppBusId>;
   hasAppBuses!: Sequelize.HasManyHasAssociationsMixin<AppBus, AppBusId>;
   countAppBuses!: Sequelize.HasManyCountAssociationsMixin;
-  // AppPartner belongsToMany AppBus via partnerId and busId
-  busIdAppBuses!: AppBus[];
-  getBusIdAppBuses!: Sequelize.BelongsToManyGetAssociationsMixin<AppBus>;
-  setBusIdAppBuses!: Sequelize.BelongsToManySetAssociationsMixin<AppBus, AppBusId>;
-  addBusIdAppBus!: Sequelize.BelongsToManyAddAssociationMixin<AppBus, AppBusId>;
-  addBusIdAppBuses!: Sequelize.BelongsToManyAddAssociationsMixin<AppBus, AppBusId>;
-  createBusIdAppBus!: Sequelize.BelongsToManyCreateAssociationMixin<AppBus>;
-  removeBusIdAppBus!: Sequelize.BelongsToManyRemoveAssociationMixin<AppBus, AppBusId>;
-  removeBusIdAppBuses!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppBus, AppBusId>;
-  hasBusIdAppBus!: Sequelize.BelongsToManyHasAssociationMixin<AppBus, AppBusId>;
-  hasBusIdAppBuses!: Sequelize.BelongsToManyHasAssociationsMixin<AppBus, AppBusId>;
-  countBusIdAppBuses!: Sequelize.BelongsToManyCountAssociationsMixin;
-  // AppPartner belongsToMany AppLocation via partnerId and locId
-  locIdAppLocations!: AppLocation[];
-  getLocIdAppLocations!: Sequelize.BelongsToManyGetAssociationsMixin<AppLocation>;
-  setLocIdAppLocations!: Sequelize.BelongsToManySetAssociationsMixin<AppLocation, AppLocationId>;
-  addLocIdAppLocation!: Sequelize.BelongsToManyAddAssociationMixin<AppLocation, AppLocationId>;
-  addLocIdAppLocations!: Sequelize.BelongsToManyAddAssociationsMixin<AppLocation, AppLocationId>;
-  createLocIdAppLocation!: Sequelize.BelongsToManyCreateAssociationMixin<AppLocation>;
-  removeLocIdAppLocation!: Sequelize.BelongsToManyRemoveAssociationMixin<AppLocation, AppLocationId>;
-  removeLocIdAppLocations!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppLocation, AppLocationId>;
-  hasLocIdAppLocation!: Sequelize.BelongsToManyHasAssociationMixin<AppLocation, AppLocationId>;
-  hasLocIdAppLocations!: Sequelize.BelongsToManyHasAssociationsMixin<AppLocation, AppLocationId>;
-  countLocIdAppLocations!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppPartner hasOne PartnerBankAccount via partnerId
   partnerBankAccount!: PartnerBankAccount;
   getPartnerBankAccount!: Sequelize.HasOneGetAssociationMixin<PartnerBankAccount>;

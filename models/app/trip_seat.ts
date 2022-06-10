@@ -4,6 +4,7 @@ import type { AppBooking, AppBookingId } from './app_booking';
 import type { AppTrip, AppTripId } from './app_trip';
 
 export interface TripSeatAttributes {
+  id: number;
   tripId: number;
   seatId: number;
   bookingId?: string;
@@ -14,12 +15,13 @@ export interface TripSeatAttributes {
   updatedAt?: Date;
 }
 
-export type TripSeatPk = "tripId" | "seatId";
+export type TripSeatPk = "id";
 export type TripSeatId = TripSeat[TripSeatPk];
-export type TripSeatOptionalAttributes = "bookingId" | "bookingSessionId" | "dateLocked" | "dateReserved" | "createdAt" | "updatedAt";
+export type TripSeatOptionalAttributes = "id" | "bookingId" | "bookingSessionId" | "dateLocked" | "dateReserved" | "createdAt" | "updatedAt";
 export type TripSeatCreationAttributes = Optional<TripSeatAttributes, TripSeatOptionalAttributes>;
 
 export class TripSeat extends Model<TripSeatAttributes, TripSeatCreationAttributes> implements TripSeatAttributes {
+  id!: number;
   tripId!: number;
   seatId!: number;
   bookingId?: string;
@@ -42,10 +44,15 @@ export class TripSeat extends Model<TripSeatAttributes, TripSeatCreationAttribut
 
   static initModel(sequelize: Sequelize.Sequelize): typeof TripSeat {
     return sequelize.define('TripSeat', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     tripId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_trips',
         key: 'trip_id'
@@ -55,7 +62,6 @@ export class TripSeat extends Model<TripSeatAttributes, TripSeatCreationAttribut
     seatId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       field: 'seat_id'
     },
     bookingId: {
@@ -99,6 +105,14 @@ export class TripSeat extends Model<TripSeatAttributes, TripSeatCreationAttribut
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "trip_id_2",
         unique: true,
         using: "BTREE",
         fields: [

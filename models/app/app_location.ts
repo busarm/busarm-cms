@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppCity, AppCityId } from './app_city';
-import type { AppPartner, AppPartnerId } from './app_partner';
 import type { AppTrip, AppTripId } from './app_trip';
 import type { LocationType, LocationTypeId } from './location_type';
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
@@ -40,18 +39,6 @@ export class AppLocation extends Model<AppLocationAttributes, AppLocationCreatio
   getCity!: Sequelize.BelongsToGetAssociationMixin<AppCity>;
   setCity!: Sequelize.BelongsToSetAssociationMixin<AppCity, AppCityId>;
   createCity!: Sequelize.BelongsToCreateAssociationMixin<AppCity>;
-  // AppLocation belongsToMany AppPartner via locId and partnerId
-  partnerIdAppPartners!: AppPartner[];
-  getPartnerIdAppPartners!: Sequelize.BelongsToManyGetAssociationsMixin<AppPartner>;
-  setPartnerIdAppPartners!: Sequelize.BelongsToManySetAssociationsMixin<AppPartner, AppPartnerId>;
-  addPartnerIdAppPartner!: Sequelize.BelongsToManyAddAssociationMixin<AppPartner, AppPartnerId>;
-  addPartnerIdAppPartners!: Sequelize.BelongsToManyAddAssociationsMixin<AppPartner, AppPartnerId>;
-  createPartnerIdAppPartner!: Sequelize.BelongsToManyCreateAssociationMixin<AppPartner>;
-  removePartnerIdAppPartner!: Sequelize.BelongsToManyRemoveAssociationMixin<AppPartner, AppPartnerId>;
-  removePartnerIdAppPartners!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppPartner, AppPartnerId>;
-  hasPartnerIdAppPartner!: Sequelize.BelongsToManyHasAssociationMixin<AppPartner, AppPartnerId>;
-  hasPartnerIdAppPartners!: Sequelize.BelongsToManyHasAssociationsMixin<AppPartner, AppPartnerId>;
-  countPartnerIdAppPartners!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppLocation hasMany AppTrip via dropoffLocId
   appTrips!: AppTrip[];
   getAppTrips!: Sequelize.HasManyGetAssociationsMixin<AppTrip>;

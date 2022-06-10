@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppCountry, AppCountryId } from './app_country';
 import type { AppStatus, AppStatusId } from './app_status';
-import type { AppTicket, AppTicketId } from './app_ticket';
 import type { AppUser, AppUserId } from './app_user';
 import type { BookingDiscount, BookingDiscountCreationAttributes, BookingDiscountId } from './booking_discount';
 import type { BookingPromo, BookingPromoCreationAttributes, BookingPromoId } from './booking_promo';
@@ -37,18 +36,6 @@ export class AppBooking extends Model<AppBookingAttributes, AppBookingCreationAt
   createdAt!: Date;
   updatedAt?: Date;
 
-  // AppBooking belongsToMany AppTicket via bookingId and ticketTypeId
-  ticketTypeIdAppTickets!: AppTicket[];
-  getTicketTypeIdAppTickets!: Sequelize.BelongsToManyGetAssociationsMixin<AppTicket>;
-  setTicketTypeIdAppTickets!: Sequelize.BelongsToManySetAssociationsMixin<AppTicket, AppTicketId>;
-  addTicketTypeIdAppTicket!: Sequelize.BelongsToManyAddAssociationMixin<AppTicket, AppTicketId>;
-  addTicketTypeIdAppTickets!: Sequelize.BelongsToManyAddAssociationsMixin<AppTicket, AppTicketId>;
-  createTicketTypeIdAppTicket!: Sequelize.BelongsToManyCreateAssociationMixin<AppTicket>;
-  removeTicketTypeIdAppTicket!: Sequelize.BelongsToManyRemoveAssociationMixin<AppTicket, AppTicketId>;
-  removeTicketTypeIdAppTickets!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppTicket, AppTicketId>;
-  hasTicketTypeIdAppTicket!: Sequelize.BelongsToManyHasAssociationMixin<AppTicket, AppTicketId>;
-  hasTicketTypeIdAppTickets!: Sequelize.BelongsToManyHasAssociationsMixin<AppTicket, AppTicketId>;
-  countTicketTypeIdAppTickets!: Sequelize.BelongsToManyCountAssociationsMixin;
   // AppBooking hasOne BookingDiscount via bookingId
   bookingDiscount!: BookingDiscount;
   getBookingDiscount!: Sequelize.HasOneGetAssociationMixin<BookingDiscount>;

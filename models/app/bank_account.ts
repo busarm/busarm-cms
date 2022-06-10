@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { AppCountry, AppCountryId } from './app_country';
 import type { CountryBankAccount, CountryBankAccountId } from './country_bank_account';
 import type { PartnerBankAccount, PartnerBankAccountId } from './partner_bank_account';
 import type { UserBankAccount, UserBankAccountId } from './user_bank_account';
@@ -29,18 +28,6 @@ export class BankAccount extends Model<BankAccountAttributes, BankAccountCreatio
   createdAt!: Date;
   updatedAt?: Date;
 
-  // BankAccount belongsToMany AppCountry via accountId and countryCode
-  countryCodeAppCountries!: AppCountry[];
-  getCountryCodeAppCountries!: Sequelize.BelongsToManyGetAssociationsMixin<AppCountry>;
-  setCountryCodeAppCountries!: Sequelize.BelongsToManySetAssociationsMixin<AppCountry, AppCountryId>;
-  addCountryCodeAppCountry!: Sequelize.BelongsToManyAddAssociationMixin<AppCountry, AppCountryId>;
-  addCountryCodeAppCountries!: Sequelize.BelongsToManyAddAssociationsMixin<AppCountry, AppCountryId>;
-  createCountryCodeAppCountry!: Sequelize.BelongsToManyCreateAssociationMixin<AppCountry>;
-  removeCountryCodeAppCountry!: Sequelize.BelongsToManyRemoveAssociationMixin<AppCountry, AppCountryId>;
-  removeCountryCodeAppCountries!: Sequelize.BelongsToManyRemoveAssociationsMixin<AppCountry, AppCountryId>;
-  hasCountryCodeAppCountry!: Sequelize.BelongsToManyHasAssociationMixin<AppCountry, AppCountryId>;
-  hasCountryCodeAppCountries!: Sequelize.BelongsToManyHasAssociationsMixin<AppCountry, AppCountryId>;
-  countCountryCodeAppCountries!: Sequelize.BelongsToManyCountAssociationsMixin;
   // BankAccount hasMany CountryBankAccount via accountId
   countryBankAccounts!: CountryBankAccount[];
   getCountryBankAccounts!: Sequelize.HasManyGetAssociationsMixin<CountryBankAccount>;

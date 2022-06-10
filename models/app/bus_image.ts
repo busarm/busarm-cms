@@ -10,7 +10,7 @@ export interface BusImageAttributes {
   updatedAt?: Date;
 }
 
-export type BusImagePk = "imageId" | "busId";
+export type BusImagePk = "imageId";
 export type BusImageId = BusImage[BusImagePk];
 export type BusImageOptionalAttributes = "imageId" | "createdAt" | "updatedAt";
 export type BusImageCreationAttributes = Optional<BusImageAttributes, BusImageOptionalAttributes>;
@@ -40,7 +40,6 @@ export class BusImage extends Model<BusImageAttributes, BusImageCreationAttribut
     busId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_buses',
         key: 'bus_id'
@@ -73,7 +72,6 @@ export class BusImage extends Model<BusImageAttributes, BusImageCreationAttribut
         using: "BTREE",
         fields: [
           { name: "image_id" },
-          { name: "bus_id" },
         ]
       },
       {

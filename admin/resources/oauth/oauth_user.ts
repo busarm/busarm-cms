@@ -141,6 +141,14 @@ export const OauthUserResource = (
             },
             properties: {
                 ...resource.options?.properties,
+                userId: {
+                    ...resource.options?.properties.userId,
+                    isTitle: false
+                },
+                email: {
+                    ...resource.options?.properties.email,
+                    isTitle: true
+                },
                 newPassword: {
                     type: "password",
                     isRequired: true,

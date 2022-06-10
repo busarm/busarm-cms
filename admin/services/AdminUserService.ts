@@ -1,8 +1,8 @@
 import CryptoJS from "crypto-js";
-import { Models } from "../bootstrap/database";
-import { AccessCredential } from "../models/access/access_credential";
-import { AccessPermissions } from "../admin/helpers/permissions";
-import { AccessRoles } from "../admin/helpers/roles";
+import { Models } from "../../bootstrap/database";
+import { AccessCredential } from "../../models/access/access_credential";
+import { AccessPermissions } from "../helpers/permissions";
+import { AccessRoles } from "../helpers/roles";
 
 /**
  * Create admin user
@@ -26,6 +26,7 @@ export const createAdmin = async function (
         salt,
         role,
         permissions,
+        isActive: 1
     });
 };
 

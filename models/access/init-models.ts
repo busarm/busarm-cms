@@ -3,8 +3,6 @@ import { AccessCredential as _AccessCredential } from "./access_credential";
 import type { AccessCredentialAttributes, AccessCredentialCreationAttributes } from "./access_credential";
 import { AccessLog as _AccessLog } from "./access_log";
 import type { AccessLogAttributes, AccessLogCreationAttributes } from "./access_log";
-import { CmsSession as _CmsSession } from "./cms_session";
-import type { CmsSessionAttributes, CmsSessionCreationAttributes } from "./cms_session";
 import { LogDevice as _LogDevice } from "./log_device";
 import type { LogDeviceAttributes, LogDeviceCreationAttributes } from "./log_device";
 import { LogSession as _LogSession } from "./log_session";
@@ -15,7 +13,6 @@ import type { MigrationAttributes, MigrationCreationAttributes } from "./migrati
 export {
   _AccessCredential as AccessCredential,
   _AccessLog as AccessLog,
-  _CmsSession as CmsSession,
   _LogDevice as LogDevice,
   _LogSession as LogSession,
   _Migration as Migration,
@@ -26,8 +23,6 @@ export type {
   AccessCredentialCreationAttributes,
   AccessLogAttributes,
   AccessLogCreationAttributes,
-  CmsSessionAttributes,
-  CmsSessionCreationAttributes,
   LogDeviceAttributes,
   LogDeviceCreationAttributes,
   LogSessionAttributes,
@@ -39,7 +34,6 @@ export type {
 export function initModels(sequelize: Sequelize) {
   const AccessCredential = _AccessCredential.initModel(sequelize);
   const AccessLog = _AccessLog.initModel(sequelize);
-  const CmsSession = _CmsSession.initModel(sequelize);
   const LogDevice = _LogDevice.initModel(sequelize);
   const LogSession = _LogSession.initModel(sequelize);
   const Migration = _Migration.initModel(sequelize);
@@ -52,7 +46,6 @@ export function initModels(sequelize: Sequelize) {
   return {
     AccessCredential: AccessCredential,
     AccessLog: AccessLog,
-    CmsSession: CmsSession,
     LogDevice: LogDevice,
     LogSession: LogSession,
     Migration: Migration,

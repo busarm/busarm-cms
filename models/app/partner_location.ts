@@ -4,6 +4,7 @@ import type { AppLocation, AppLocationId } from './app_location';
 import type { AppPartner, AppPartnerId } from './app_partner';
 
 export interface PartnerLocationAttributes {
+  id: number;
   partnerId: number;
   locId: number;
   isActive?: number;
@@ -12,12 +13,13 @@ export interface PartnerLocationAttributes {
   updatedAt?: Date;
 }
 
-export type PartnerLocationPk = "partnerId" | "locId";
+export type PartnerLocationPk = "id";
 export type PartnerLocationId = PartnerLocation[PartnerLocationPk];
-export type PartnerLocationOptionalAttributes = "isActive" | "isDefault" | "createdAt" | "updatedAt";
+export type PartnerLocationOptionalAttributes = "id" | "isActive" | "isDefault" | "createdAt" | "updatedAt";
 export type PartnerLocationCreationAttributes = Optional<PartnerLocationAttributes, PartnerLocationOptionalAttributes>;
 
 export class PartnerLocation extends Model<PartnerLocationAttributes, PartnerLocationCreationAttributes> implements PartnerLocationAttributes {
+  id!: number;
   partnerId!: number;
   locId!: number;
   isActive?: number;
@@ -38,10 +40,15 @@ export class PartnerLocation extends Model<PartnerLocationAttributes, PartnerLoc
 
   static initModel(sequelize: Sequelize.Sequelize): typeof PartnerLocation {
     return sequelize.define('PartnerLocation', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     partnerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_partners',
         key: 'partner_id'
@@ -51,7 +58,6 @@ export class PartnerLocation extends Model<PartnerLocationAttributes, PartnerLoc
     locId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'app_locations',
         key: 'loc_id'
@@ -87,6 +93,14 @@ export class PartnerLocation extends Model<PartnerLocationAttributes, PartnerLoc
     indexes: [
       {
         name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "partner_id",
         unique: true,
         using: "BTREE",
         fields: [
