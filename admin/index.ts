@@ -5,7 +5,7 @@ import AdminJSSequelize from "@adminjs/sequelize";
 import { Model, ModelStatic } from "sequelize/types";
 
 import config from "../configs/app";
-import { Models, ModifyPermissions, ViewPermissions } from "../bootstrap/database";
+import { Connections, Models, ModifyPermissions, ViewPermissions } from "../bootstrap/database";
 import { Resource, ModelResource, Nav } from "./resource";
 import { Utils } from "./helpers/utils";
 import { Action } from "./helpers/actions";
@@ -13,6 +13,7 @@ import { getSessionOption } from "./helpers/session";
 import { authenticate, checkAuth } from "./services/AuthService";
 import { checkAdmin, createAdmin } from "./services/AdminUserService";
 import { AccessRoles, RolePermissions } from "./helpers/roles";
+import { aceessAudit } from "./helpers/audit";
 
 // Register sequelize adapter to handle sequelize db
 AdminJS.registerAdapter(AdminJSSequelize);
@@ -112,7 +113,6 @@ const resources = (): Resource[] => {
 export default async (path: string, app: Application): Promise<Application> => {
     try {
         // Initialize AdminJS
-        // Set up admin
         const adminJs = new AdminJS({
             rootPath: path,
             loginPath: path.replace(/\/$/, "") + "/login",
@@ -158,38 +158,23 @@ export default async (path: string, app: Application): Promise<Application> => {
             version: {
                 admin: true,
                 app: config.version
-            }
+            },
         });
+        // Set up AdminJS router
         const adminJsRouter = await init(adminJs);
 
-        // Add route middleware to prevent caching admin API in browser, which could lead to issues
-        app.use(path + "/api/*", function (_, res, next) {
-            res.header("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            res.header("Pragma", "no-cache"); // HTTP 1.0.
-            res.header("Expires", "0"); // Proxies.
-            next();
-        });
+        // Add Audit middleware
+        app.use(aceessAudit({
+            databases: Object.values(Connections)
+        }));
 
         // Add Admin Auth middleware
-        app.use(async (req, res, next) => {
-            // Ensure only admin path is processed using this auth
-            if (req.path.startsWith(adminJs.options.rootPath)) {
-                // Is not authenticated
-                const authUser = await checkAuth(req);
-                if (!authUser) {
-                    req.session.adminUser = null;
-                    if (req.path.startsWith(adminJs.options.rootPath.replace(/\/$/, "") + "/frontend")) {
-                        return res.status(401).send();
-                    } else if (
-                        !req.path.startsWith(adminJs.options.logoutPath) &&
-                        !req.path.startsWith(adminJs.options.loginPath)
-                    ) {
-                        return res.redirect(adminJs.options.logoutPath);
-                    }
-                }
-            }
-            return next();
-        });
+        app.use(checkAuth({
+            rootPath: adminJs.options.rootPath,
+            loginPath: adminJs.options.loginPath,
+            logoutPath: adminJs.options.logoutPath,
+            frontendPath: "/frontend"
+        }));
 
         // Add Admin route middleware
         app.use(path, adminJsRouter);

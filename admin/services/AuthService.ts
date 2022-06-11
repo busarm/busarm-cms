@@ -1,10 +1,10 @@
 import CryptoJS from "crypto-js";
-import { Request } from "express";
+import { Request, RequestHandler } from "express";
 import { Models } from "../../bootstrap/database";
 import { AccessCredential } from "../../models/access/access_credential";
 import { CanAdmin } from "../helpers/permissions";
 import { RolePermissions } from "../helpers/roles";
-import { CurrentAdmin } from "adminjs";
+import { AdminJSSettings, CurrentAdmin } from "adminjs";
 
 /**
  * Authenticate user
@@ -37,22 +37,34 @@ export const authenticate = async function (username: string, password: string):
 };
 
 /**
- * Authenticate user
- * @param req
- * @returns {Promise<CurrentAdmin>}
+ * Check authentication middleware
+ * @param paths 
+ * @returns 
  */
-export const checkAuth = async function (req: Request): Promise<CurrentAdmin> {
-    try {
+export const checkAuth = function (paths: {
+    rootPath: string,
+    loginPath: string,
+    logoutPath: string,
+    frontendPath: string,
+}): RequestHandler {
+    return (req, res, next) => {
         const authUser =
             req.session.adminUser && Object.keys(req.session.adminUser).length > 0 ? req.session.adminUser : null;
 
-        return authUser &&
-            ((authUser.role && CanAdmin(RolePermissions[authUser.role])) ||
-                (authUser.permissions && CanAdmin(Object.values(authUser.permissions))))
-            ? authUser
-            : null;
-    } catch (error) {
-        console.log(error);
-        return null;
+        if (!authUser ||
+            !((authUser.role && CanAdmin(RolePermissions[authUser.role])) ||
+                (authUser.permissions && CanAdmin(Object.values(authUser.permissions))))) {
+
+            req.session.adminUser = null;
+            if (req.path.startsWith(paths.rootPath.replace(/\/$/, "") + paths.frontendPath)) {
+                return res.status(401).send();
+            } else if (
+                !req.path.startsWith(paths.logoutPath) &&
+                !req.path.startsWith(paths.loginPath)
+            ) {
+                return res.redirect(paths.logoutPath);
+            }
+        }
+        return next();
     }
 };

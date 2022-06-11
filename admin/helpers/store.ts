@@ -48,7 +48,9 @@ export class AccesSessionStore extends Store {
      * @param callback 
      */
     touch(sid: string, data: any, callback?: (err: any) => void): void {
-        this.set(sid, data, callback);
+        console.error("TOUCH SESSION", data);
+        setExpressSession(sid, data, true)
+            .catch(callback || console.log);
     }
 
     /**

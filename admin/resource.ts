@@ -1,5 +1,6 @@
 
 import config from "../configs/app";
+import { Resource as AdminJsSequelizeResource } from "@adminjs/sequelize";
 import { flat, PropertyOptions, ResourceOptions, ResourceWithOptions } from "adminjs";
 import { CanView, CanModify, AccessPermissions } from "./helpers/permissions";
 import { DataTypes, Model, ModelStatic } from "sequelize";
@@ -13,9 +14,44 @@ import { AccessCredential } from "../models/access/access_credential";
 import { AccessCredentialsResource } from "./resources/access/access_credentials";
 import { LogSession } from "../models/access/log_session";
 import { LogSessionResource } from "./resources/access/log_session";
+import { AccessAudit } from "../models/access/access_audit";
+import { AccessAuditResource } from "./resources/access/access_audit";
 
+// Extend AdminJs Sequelize Resource to update feature
+export class SequelizeResource extends AdminJsSequelizeResource {
+    constructor(resource?: ModelStatic<Model>) {
+        super(resource);
+    }
+
+    /**
+     * Check all params against values they hold. In case of wrong value it corrects it.
+     *
+     * What it does exactly:
+     * - removes keys with empty strings for the `number`, `float` and 'reference' properties.
+     *
+     * @param   {Object}  params  received from AdminJS form
+     *
+     * @return  {Object}          converted params
+     */
+    parseParams(params: any): any {
+        const parsedParams = { ...params };
+        this.properties().forEach((property) => {
+            const value = parsedParams[property.name()];
+            if (value === '') {
+                if (property.isArray() || property.type() !== 'string') {
+                    delete parsedParams[property.name()];
+                }
+            }
+            let attr = this.rawAttributes()[property.name()]
+            if ((attr && attr.primaryKey && (attr.autoIncrement || attr.autoIncrementIdentity) || !property.isEditable)) {
+                delete parsedParams[property.name()];
+            }
+        });
+        return parsedParams;
+    }
+}
 export interface Resource extends ResourceWithOptions {
-    resource: ModelStatic<Model>;
+    resource: SequelizeResource;
     options: ResourceOptions;
     name: String;
     order: Number;
@@ -55,6 +91,15 @@ export function ModelResource(
 ): Resource | false {
     switch (String(model.name)) {
         // TODO Add custom resources
+        case AccessAudit.name:
+            return AccessAuditResource(
+                id,
+                model,
+                order,
+                navigation,
+                AccessPermissions.VIEW_ACCESS_USER,
+                AccessPermissions.MODIFY_ACCESS_USER
+            );
         case AccessCredential.name:
             return AccessCredentialsResource(
                 id,
@@ -120,10 +165,11 @@ export const DefaultResource = (
         const isTitle = Boolean(attr.primaryKey || attr.unique);
         const isArray = attr.type.constructor.name == DataTypes.JSON.name;
         const isSortable = !isArray;
+        const isDisabled = isId && (attr.autoIncrement || attr.autoIncrementIdentity)
         const isRequired = isId || !attr.allowNull;
         const canShow = !["password", "salt", "secret", "client_secret", "private_key"].includes(attr.field);
         const canEdit =
-            !(attr.primaryKey && attr.autoIncrement) &&
+            !isDisabled &&
             ![
                 "password",
                 "salt",
@@ -149,6 +195,7 @@ export const DefaultResource = (
             isArray,
             isSortable,
             isRequired,
+            isDisabled,
             isVisible: {
                 filter: true,
                 list: canList,
@@ -163,7 +210,7 @@ export const DefaultResource = (
         listCount = listCount + Number(canList);
     });
     return {
-        resource: model,
+        resource: new SequelizeResource(model),
         options: {
             id,
             navigation,
@@ -186,7 +233,7 @@ export const DefaultResource = (
                     before: async (request) => {
                         request.payload = flat.unflatten(request.payload);
                         return request;
-                    },
+                    }
                 },
                 edit: {
                     isVisible: ({ currentAdmin }) =>

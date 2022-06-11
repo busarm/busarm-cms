@@ -18,8 +18,6 @@ export const CookieOption: CookieOptions = {
   sameSite: 'lax',
 };
 
-// Session Store
-
 // Session Options
 export const getSessionOption = (): SessionOptions => {
   const store = new AccesSessionStore(CookieOption);
@@ -30,7 +28,6 @@ export const getSessionOption = (): SessionOptions => {
     resave: true,
     cookie: CookieOption,
     store: store,
-    //   store: SequelizeStore,
     genid: store.generateId,
   }
 };

@@ -5,7 +5,6 @@ import { AccessLog } from '../../models/access/access_log';
 import { Details } from 'express-useragent';
 import { LogSession } from '../../models/access/log_session';
 import { Utils } from '../helpers/utils';
-import { SessionData } from 'express-session';
 
 /**
  * Create access log for express session
@@ -35,7 +34,7 @@ export const createExpressSession = async (
         lng: geo?.ll ? geo.ll[1] : 0,
         lastAccess: new Date(),
         isLive: config.env === ENV.PROD || config.env === ENV.TEST ? 1 : 0,
-    }).then(([access, created]) => {
+    }, { hooks: false }).then(([access, created]) => {
         if (access && !created) {
             return Models.access.AccessLog.findOne({ where: { sessionToken: sid } });
         }
@@ -51,7 +50,7 @@ export const createExpressSession = async (
             deviceOs: useragent?.os || '',
             deviceBrand: useragent?.platform || '',
             deviceType: useragent?.isMobile ? 'Mobile' : useragent?.isDesktop ? 'Desktop' : 'Browser',
-        }).then(([device]) => device);
+        }, { hooks: false }).then(([device]) => device);
 
         // Add session data
         if (session) {
@@ -60,7 +59,7 @@ export const createExpressSession = async (
                     accessId: access.accessId,
                     sessionKey: key,
                     sessionValue: JSON.stringify(value),
-                });
+                }, { hooks: false });
                 return log;
             }));
         }
@@ -76,6 +75,7 @@ export const createExpressSession = async (
 export const setExpressSession = async (
     sid: string,
     session: { [s in string]: any },
+    touch = false
 ): Promise<AccessLog> => {
     let access = await Models.access.AccessLog.findOne({ where: { sessionToken: sid } });
     if (access) {
@@ -86,12 +86,14 @@ export const setExpressSession = async (
                     accessId: access.accessId,
                     sessionKey: key,
                     sessionValue: JSON.stringify(value),
-                });
+                }, { hooks: false });
                 return log;
             }));
         }
-        // Update last access
-        access.update({ lastAccess: new Date() })
+        if (touch) {
+            // Update last access
+            access.update({ lastAccess: new Date() }, { hooks: false })
+        }
         return access;
     }
     else return createExpressSession(sid, session)
@@ -104,7 +106,7 @@ export const setExpressSession = async (
 export const updateLastAccess = async (
     sid: string,
 ): Promise<any> => {
-    return Models.access.AccessLog.update({ lastAccess: new Date() }, { where: { sessionToken: sid } });
+    return Models.access.AccessLog.update({ lastAccess: new Date() }, { where: { sessionToken: sid }, hooks: false });
 };
 
 /**
@@ -121,22 +123,30 @@ export const getExpressSession = async (sid: string, maxAge: number): Promise<Lo
 };
 
 /**
- * Remove access session log for express session
+ * Remove access session logs for express session
  * @param sid
  */
 export const removeExpressSession = async (sid: string): Promise<void> => {
     const access = await Models.access.AccessLog.findOne({ where: { sessionToken: sid } });
     if (access) {
-        await access.removeLogSessions();
+        await Models.access.LogSession.destroy({ where: { accessId: access.accessId }, hooks: false });
     }
     return;
 };
 
 /**
+ * Get access session instance
+ * @param sid
+ */
+export const getSession = async (sid: string): Promise<AccessLog> => {
+    return await Models.access.AccessLog.findOne({ where: { sessionToken: sid } });
+};
+
+/**
  * Check session expiry
  * @param lastAccess 
- * @param data 
- * @returns 
+ * @param maxAge 
+ * @returns {boolean}
  */
 function hasExpired(lastAccess: Date, maxAge: number): boolean {
     return lastAccess.getTime() + maxAge <= Date.now();

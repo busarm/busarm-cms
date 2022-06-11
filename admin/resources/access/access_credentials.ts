@@ -1,7 +1,7 @@
 import { AccessRoles } from "../../helpers/roles";
 import { AccessPermissions } from "../../helpers/permissions";
 import { Model, ModelStatic } from "sequelize/types";
-import { DefaultResource, Navigation, Resource } from "../../resource";
+import { DefaultResource, Navigation, Resource, SequelizeResource } from "../../resource";
 import { Response } from "../../helpers/response";
 import adminjs, {
     ActionRequest,
@@ -36,7 +36,7 @@ export const AccessCredentialsResource = (
     if (!resource) return false;
     return {
         ...resource,
-        resource: model,
+        resource: new SequelizeResource(model),
         options: {
             ...resource.options,
             actions: {

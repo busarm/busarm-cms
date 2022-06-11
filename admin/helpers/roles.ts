@@ -29,6 +29,7 @@ export const RolePermissions: {[k in AccessRoles] :  AccessPermissions[]} = {
     [AccessRoles.MANAGER]: [
         AccessPermissions.ACCESS_ADMIN,
         AccessPermissions.VIEW_ACCESS_USER,
+        AccessPermissions.VIEW_ACCESS,
         AccessPermissions.VIEW_APP,
         AccessPermissions.MODIFY_APP,
         AccessPermissions.VIEW_OAUTH,

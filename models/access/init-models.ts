@@ -1,4 +1,6 @@
 import type { Sequelize } from "sequelize";
+import { AccessAudit as _AccessAudit } from "./access_audit";
+import type { AccessAuditAttributes, AccessAuditCreationAttributes } from "./access_audit";
 import { AccessCredential as _AccessCredential } from "./access_credential";
 import type { AccessCredentialAttributes, AccessCredentialCreationAttributes } from "./access_credential";
 import { AccessLog as _AccessLog } from "./access_log";
@@ -11,6 +13,7 @@ import { Migration as _Migration } from "./migration";
 import type { MigrationAttributes, MigrationCreationAttributes } from "./migration";
 
 export {
+  _AccessAudit as AccessAudit,
   _AccessCredential as AccessCredential,
   _AccessLog as AccessLog,
   _LogDevice as LogDevice,
@@ -19,6 +22,8 @@ export {
 };
 
 export type {
+  AccessAuditAttributes,
+  AccessAuditCreationAttributes,
   AccessCredentialAttributes,
   AccessCredentialCreationAttributes,
   AccessLogAttributes,
@@ -32,6 +37,7 @@ export type {
 };
 
 export function initModels(sequelize: Sequelize) {
+  const AccessAudit = _AccessAudit.initModel(sequelize);
   const AccessCredential = _AccessCredential.initModel(sequelize);
   const AccessLog = _AccessLog.initModel(sequelize);
   const LogDevice = _LogDevice.initModel(sequelize);
@@ -44,6 +50,7 @@ export function initModels(sequelize: Sequelize) {
   AccessLog.hasMany(LogSession, { foreignKey: "accessId"});
 
   return {
+    AccessAudit: AccessAudit,
     AccessCredential: AccessCredential,
     AccessLog: AccessLog,
     LogDevice: LogDevice,
