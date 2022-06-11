@@ -34,18 +34,14 @@ export const AccessAuditResource = (
                 show: {
                     ...resource.options?.actions?.show,
                     after: async (response: RecordActionResponse): Promise<RecordActionResponse> => {
-                        try {
-                            if (response.record.params.data) {
-                                response.record.params.data = JSON.parse(response.record.params.data);
-                            }
-                            if (response.record.params.user) {
-                                response.record.params.user = JSON.parse(response.record.params.user);
-                            }
-                            if (response.record.params.session) {
-                                response.record.params.session = JSON.parse(response.record.params.session);
-                            }
-                        } catch (error) {
-                            console.log(error);
+                        if (response.record.params.data) {
+                            response.record.params.data = Utils.fromJsonOrString(response.record.params.data);
+                        }
+                        if (response.record.params.user) {
+                            response.record.params.user = Utils.fromJsonOrString(response.record.params.user);
+                        }
+                        if (response.record.params.session) {
+                            response.record.params.session = Utils.fromJsonOrString(response.record.params.session);
                         }
                         return response;
                     },

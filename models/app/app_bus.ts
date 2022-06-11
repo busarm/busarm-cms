@@ -6,6 +6,7 @@ import type { AppText, AppTextId } from './app_text';
 import type { BusImage, BusImageId } from './bus_image';
 import type { BusType, BusTypeId } from './bus_type';
 import type { PartnerSharedBus, PartnerSharedBusId } from './partner_shared_bus';
+import type { TripBus, TripBusId } from './trip_bus';
 
 export interface AppBusAttributes {
   busId: number;
@@ -59,6 +60,30 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
   hasPartnerSharedBus!: Sequelize.HasManyHasAssociationMixin<PartnerSharedBus, PartnerSharedBusId>;
   hasPartnerSharedBuses!: Sequelize.HasManyHasAssociationsMixin<PartnerSharedBus, PartnerSharedBusId>;
   countPartnerSharedBuses!: Sequelize.HasManyCountAssociationsMixin;
+  // AppBus hasMany TripBus via partnerId
+  tripBuses!: TripBus[];
+  getTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
+  setTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
+  addTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
+  addTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
+  createTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
+  removeTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
+  removeTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
+  hasTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
+  hasTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
+  countTripBuses!: Sequelize.HasManyCountAssociationsMixin;
+  // AppBus hasMany TripBus via busId
+  busTripBuses!: TripBus[];
+  getBusTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
+  setBusTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
+  addBusTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
+  addBusTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
+  createBusTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
+  removeBusTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
+  removeBusTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
+  hasBusTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
+  hasBusTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
+  countBusTripBuses!: Sequelize.HasManyCountAssociationsMixin;
   // AppBus belongsTo AppCountry via countryCode
   countryCodeAppCountry!: AppCountry;
   getCountryCodeAppCountry!: Sequelize.BelongsToGetAssociationMixin<AppCountry>;

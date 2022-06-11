@@ -2,6 +2,7 @@ import { AccessPermissions } from "../../helpers/permissions";
 import { Model, ModelStatic } from "sequelize/types";
 import { DefaultResource, Navigation, Resource, SequelizeResource } from "../../resource";
 import adminjs, { RecordActionResponse } from "adminjs";
+import { Utils } from "../../helpers/utils";
 
 /**
  * @param {Model} model Model Object
@@ -31,12 +32,8 @@ export const LogSessionResource = (
                 show: {
                     ...resource.options?.actions?.show,
                     after: async (response: RecordActionResponse): Promise<RecordActionResponse> => {
-                        try {
-                            if (response.record.params.sessionValue) {
-                                response.record.params.sessionValue = JSON.parse(response.record.params.sessionValue);
-                            }
-                        } catch (error) {
-                            console.log(error);
+                        if (response.record.params.sessionValue) {
+                            response.record.params.sessionValue = Utils.fromJsonOrString(response.record.params.sessionValue);
                         }
                         return response;
                     },

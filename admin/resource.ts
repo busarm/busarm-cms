@@ -187,6 +187,7 @@ export const DefaultResource = (
             canShow &&
             (attr.primaryKey || attr.type.constructor.name != DataTypes.STRING.name || length < 256) &&
             listCount < config.adminjs.max_list_count;
+        const isBoolean = attr.type.constructor.name == DataTypes.TINYINT.name || attr.type.constructor.name == DataTypes.BOOLEAN.name;
 
         // Add props
         props[key] = {
@@ -203,6 +204,7 @@ export const DefaultResource = (
                 show: canShow,
             },
             position: 100 + (index + 1),
+            type: isBoolean ? 'boolean' : undefined
         };
         if (attr.type.constructor.name === DataTypes.TEXT.name || length >= 1024) {
             props[key].type = "textarea";

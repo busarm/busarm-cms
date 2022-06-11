@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactJson, { InteractionProps } from 'react-json-view';
 import { BasePropertyProps } from 'adminjs';
-import { Box, InputGroup, Label } from '@adminjs/design-system';
+import { Box, InputGroup, Label, Text } from '@adminjs/design-system';
 import Flat from 'flat';
 
 /**
@@ -52,15 +52,17 @@ const ViewJSON: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.El
       {editable ? (
         <InputGroup>
           <ReactJson
-            src={data ? data : {}}
+            src={data ? data : []}
             onEdit={editable ? onEdit : false}
             collapsed={false}
             name={property.name}
           />
         </InputGroup>
+      ) : typeof data == 'string' ? (
+        <Text key={property.name}>{data}</Text>
       ) : (
         <ReactJson
-          src={data ? data : {}}
+          src={data ? data : []}
           onEdit={editable ? onEdit : false}
           collapsed={false}
           name={property.name}

@@ -6,7 +6,7 @@ import type { AppPartner, AppPartnerId } from './app_partner';
 
 export interface PartnerBranchAttributes {
   branchId: number;
-  branckName?: string;
+  branchName?: string;
   isActive?: number;
   locId?: number;
   partnerId?: number;
@@ -16,12 +16,12 @@ export interface PartnerBranchAttributes {
 
 export type PartnerBranchPk = "branchId";
 export type PartnerBranchId = PartnerBranch[PartnerBranchPk];
-export type PartnerBranchOptionalAttributes = "branckName" | "isActive" | "locId" | "partnerId" | "createdAt" | "updatedAt";
+export type PartnerBranchOptionalAttributes = "branchId" | "branchName" | "isActive" | "locId" | "partnerId" | "createdAt" | "updatedAt";
 export type PartnerBranchCreationAttributes = Optional<PartnerBranchAttributes, PartnerBranchOptionalAttributes>;
 
 export class PartnerBranch extends Model<PartnerBranchAttributes, PartnerBranchCreationAttributes> implements PartnerBranchAttributes {
   branchId!: number;
-  branckName?: string;
+  branchName?: string;
   isActive?: number;
   locId?: number;
   partnerId?: number;
@@ -54,15 +54,16 @@ export class PartnerBranch extends Model<PartnerBranchAttributes, PartnerBranchC
   static initModel(sequelize: Sequelize.Sequelize): typeof PartnerBranch {
     return sequelize.define('PartnerBranch', {
     branchId: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       field: 'branch_id'
     },
-    branckName: {
+    branchName: {
       type: DataTypes.STRING(45),
       allowNull: true,
-      field: 'branck_name'
+      field: 'branch_name'
     },
     isActive: {
       type: DataTypes.TINYINT,

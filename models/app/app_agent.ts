@@ -4,7 +4,6 @@ import type { AppPartner, AppPartnerId } from './app_partner';
 import type { AppTrip, AppTripId } from './app_trip';
 import type { AppUser, AppUserId } from './app_user';
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
-import type { TripBus, TripBusId } from './trip_bus';
 
 export interface AppAgentAttributes {
   agentId: number;
@@ -42,18 +41,6 @@ export class AppAgent extends Model<AppAgentAttributes, AppAgentCreationAttribut
   hasAppTrip!: Sequelize.HasManyHasAssociationMixin<AppTrip, AppTripId>;
   hasAppTrips!: Sequelize.HasManyHasAssociationsMixin<AppTrip, AppTripId>;
   countAppTrips!: Sequelize.HasManyCountAssociationsMixin;
-  // AppAgent hasMany TripBus via partnerId
-  tripBuses!: TripBus[];
-  getTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
-  setTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
-  addTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
-  addTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
-  createTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
-  removeTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
-  removeTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
-  hasTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
-  hasTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
-  countTripBuses!: Sequelize.HasManyCountAssociationsMixin;
   // AppAgent belongsTo AppPartner via partnerId
   partner!: AppPartner;
   getPartner!: Sequelize.BelongsToGetAssociationMixin<AppPartner>;

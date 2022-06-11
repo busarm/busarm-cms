@@ -4,7 +4,6 @@ import { Models } from "../../bootstrap/database";
 import { AccessCredential } from "../../models/access/access_credential";
 import { CanAdmin } from "../helpers/permissions";
 import { RolePermissions } from "../helpers/roles";
-import { AdminJSSettings, CurrentAdmin } from "adminjs";
 
 /**
  * Authenticate user
@@ -22,11 +21,11 @@ export const authenticate = async function (username: string, password: string):
             if (hash === user.password) {
                 user.attempts = user.attempts + 1;
                 user.attemptedAt = new Date();
-                return user.save();
+                return user.save({ hooks: false });
             } else {
                 user.attempts = user.attempts + 1;
                 user.attemptedAt = new Date();
-                return user.save();
+                return user.save({ hooks: false });
             }
         }
         return null;

@@ -6,7 +6,7 @@ import type { AppStatus, AppStatusId } from './app_status';
 import type { AppTicket, AppTicketId } from './app_ticket';
 import type { BookingTrip, BookingTripId } from './booking_trip';
 import type { BusType, BusTypeId } from './bus_type';
-import type { TripBus, TripBusId } from './trip_bus';
+import type { TripBus, TripBusCreationAttributes, TripBusId } from './trip_bus';
 import type { TripSeat, TripSeatId } from './trip_seat';
 
 export interface AppTripAttributes {
@@ -76,18 +76,35 @@ export class AppTrip extends Model<AppTripAttributes, AppTripCreationAttributes>
   hasBookingTrip!: Sequelize.HasManyHasAssociationMixin<BookingTrip, BookingTripId>;
   hasBookingTrips!: Sequelize.HasManyHasAssociationsMixin<BookingTrip, BookingTripId>;
   countBookingTrips!: Sequelize.HasManyCountAssociationsMixin;
+  // AppTrip hasOne TripBus via tripId
+  tripBus!: TripBus;
+  getTripBus!: Sequelize.HasOneGetAssociationMixin<TripBus>;
+  setTripBus!: Sequelize.HasOneSetAssociationMixin<TripBus, TripBusId>;
+  createTripBus!: Sequelize.HasOneCreateAssociationMixin<TripBus>;
   // AppTrip hasMany TripBus via agentId
-  tripBuses!: TripBus[];
-  getTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
-  setTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
-  addTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
-  addTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
-  createTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
-  removeTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
-  removeTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
-  hasTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
-  hasTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
-  countTripBuses!: Sequelize.HasManyCountAssociationsMixin;
+  agentTripBuses!: TripBus[];
+  getAgentTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
+  setAgentTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
+  addAgentTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
+  addAgentTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
+  createAgentTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
+  removeAgentTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
+  removeAgentTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
+  hasAgentTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
+  hasAgentTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
+  countAgentTripBuses!: Sequelize.HasManyCountAssociationsMixin;
+  // AppTrip hasMany TripBus via busTypeId
+  busTypeTripBuses!: TripBus[];
+  getBusTypeTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
+  setBusTypeTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
+  addBusTypeTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
+  addBusTypeTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
+  createBusTypeTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
+  removeBusTypeTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
+  removeBusTypeTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
+  hasBusTypeTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
+  hasBusTypeTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
+  countBusTypeTripBuses!: Sequelize.HasManyCountAssociationsMixin;
   // AppTrip hasMany TripSeat via tripId
   tripSeats!: TripSeat[];
   getTripSeats!: Sequelize.HasManyGetAssociationsMixin<TripSeat>;
