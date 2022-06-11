@@ -2,7 +2,7 @@ import { Request, RequestHandler } from "express";
 import { Model, Sequelize } from "sequelize/types";
 import { Utils } from "./utils";
 import { getSession } from "../services/SessionService";
-import { createAudit } from "../services/Audit";
+import { createAudit } from "../services/AuditService";
 import { EventEmitter } from "events";
 import CryptoJS from "crypto-js";
 
