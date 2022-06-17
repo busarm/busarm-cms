@@ -10,29 +10,47 @@ import type { TripBus, TripBusId } from './trip_bus';
 
 export interface AppBusAttributes {
   busId: number;
-  busPlateNum?: string;
+  plateNumber?: string;
   typeId: number;
-  busDescTextId?: number;
+  descTextId?: number;
   partnerId: number;
   countryCode: string;
   seats?: number;
+  hasAc?: number;
+  hasCharger?: number;
+  hasWifi?: number;
+  hasLight?: number;
+  hasBlanket?: number;
+  hasFood?: number;
+  hasWater?: number;
+  hasTv?: number;
+  hasToilet?: number;
   createdAt: Date;
   updatedAt?: Date;
 }
 
 export type AppBusPk = "busId";
 export type AppBusId = AppBus[AppBusPk];
-export type AppBusOptionalAttributes = "busId" | "busPlateNum" | "busDescTextId" | "seats" | "createdAt" | "updatedAt";
+export type AppBusOptionalAttributes = "busId" | "plateNumber" | "descTextId" | "seats" | "hasAc" | "hasCharger" | "hasWifi" | "hasLight" | "hasBlanket" | "hasFood" | "hasWater" | "hasTv" | "hasToilet" | "createdAt" | "updatedAt";
 export type AppBusCreationAttributes = Optional<AppBusAttributes, AppBusOptionalAttributes>;
 
 export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> implements AppBusAttributes {
   busId!: number;
-  busPlateNum?: string;
+  plateNumber?: string;
   typeId!: number;
-  busDescTextId?: number;
+  descTextId?: number;
   partnerId!: number;
   countryCode!: string;
   seats?: number;
+  hasAc?: number;
+  hasCharger?: number;
+  hasWifi?: number;
+  hasLight?: number;
+  hasBlanket?: number;
+  hasFood?: number;
+  hasWater?: number;
+  hasTv?: number;
+  hasToilet?: number;
   createdAt!: Date;
   updatedAt?: Date;
 
@@ -94,11 +112,11 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
   getPartner!: Sequelize.BelongsToGetAssociationMixin<AppPartner>;
   setPartner!: Sequelize.BelongsToSetAssociationMixin<AppPartner, AppPartnerId>;
   createPartner!: Sequelize.BelongsToCreateAssociationMixin<AppPartner>;
-  // AppBus belongsTo AppText via busDescTextId
-  busDescText!: AppText;
-  getBusDescText!: Sequelize.BelongsToGetAssociationMixin<AppText>;
-  setBusDescText!: Sequelize.BelongsToSetAssociationMixin<AppText, AppTextId>;
-  createBusDescText!: Sequelize.BelongsToCreateAssociationMixin<AppText>;
+  // AppBus belongsTo AppText via descTextId
+  descText!: AppText;
+  getDescText!: Sequelize.BelongsToGetAssociationMixin<AppText>;
+  setDescText!: Sequelize.BelongsToSetAssociationMixin<AppText, AppTextId>;
+  createDescText!: Sequelize.BelongsToCreateAssociationMixin<AppText>;
   // AppBus belongsTo BusType via typeId
   type!: BusType;
   getType!: Sequelize.BelongsToGetAssociationMixin<BusType>;
@@ -114,11 +132,11 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
       primaryKey: true,
       field: 'bus_id'
     },
-    busPlateNum: {
+    plateNumber: {
       type: DataTypes.STRING(50),
       allowNull: true,
-      unique: "bus_plate_num",
-      field: 'bus_plate_num'
+      unique: "plate_number",
+      field: 'plate_number'
     },
     typeId: {
       type: DataTypes.INTEGER,
@@ -129,14 +147,14 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
       },
       field: 'type_id'
     },
-    busDescTextId: {
+    descTextId: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'app_texts',
         key: 'text_id'
       },
-      field: 'bus_desc_text_id'
+      field: 'desc_text_id'
     },
     partnerId: {
       type: DataTypes.INTEGER,
@@ -159,6 +177,60 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
     seats: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    hasAc: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_ac'
+    },
+    hasCharger: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_charger'
+    },
+    hasWifi: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_wifi'
+    },
+    hasLight: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_light'
+    },
+    hasBlanket: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_blanket'
+    },
+    hasFood: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_food'
+    },
+    hasWater: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_water'
+    },
+    hasTv: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_tv'
+    },
+    hasToilet: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0,
+      field: 'has_toilet'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -193,11 +265,11 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
         ]
       },
       {
-        name: "bus_plate_num",
+        name: "plate_number",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "bus_plate_num" },
+          { name: "plate_number" },
         ]
       },
       {
@@ -222,10 +294,10 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
         ]
       },
       {
-        name: "bus_desc_text_id",
+        name: "desc_text_id",
         using: "BTREE",
         fields: [
-          { name: "bus_desc_text_id" },
+          { name: "desc_text_id" },
         ]
       },
     ]

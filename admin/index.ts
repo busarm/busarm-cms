@@ -6,7 +6,7 @@ import { Model, ModelStatic } from "sequelize/types";
 
 import config from "../configs/app";
 import { Connections, Models, ModifyPermissions, ViewPermissions } from "../bootstrap/database";
-import { Resource, ModelResource, Nav } from "./resource";
+import { Resource, ModelResource, Groups } from "./resource";
 import { Utils } from "./helpers/utils";
 import { Action } from "./helpers/actions";
 import { getSessionOption } from "./helpers/session";
@@ -62,7 +62,7 @@ const init = async (adminJs: AdminJS): Promise<Router> => {
                 return null;
             },
             cookiePassword: config.session.secret,
-            maxRetries: 5,
+            maxRetries: config.admin.max_retry || 10,
         },
         router,
         getSessionOption()
@@ -72,7 +72,7 @@ const init = async (adminJs: AdminJS): Promise<Router> => {
 /**
  * @returns {Resource[]}
  */
-const resources = (): Resource[] => {
+const resources = async (): Promise<Resource[]> => {
     let list: Resource[] = [];
     let names: string[] = [];
 
@@ -86,7 +86,7 @@ const resources = (): Resource[] => {
                 id,
                 model as ModelStatic<Model>,
                 list.length,
-                Nav(Utils.camelize(db)),
+                Groups[db],
                 ViewPermissions[db],
                 ModifyPermissions[db]
             );
@@ -117,7 +117,7 @@ export default async (path: string, app: Application): Promise<Application> => {
             rootPath: path,
             loginPath: path.replace(/\/$/, "") + "/login",
             logoutPath: path.replace(/\/$/, "") + "/logout",
-            resources: resources(),
+            resources: (await resources()),
             branding: {
                 logo: config.url.logo,
                 favicon: config.url.favicon,

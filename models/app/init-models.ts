@@ -95,6 +95,10 @@ import { TripBus as _TripBus } from "./trip_bus";
 import type { TripBusAttributes, TripBusCreationAttributes } from "./trip_bus";
 import { TripDiscount as _TripDiscount } from "./trip_discount";
 import type { TripDiscountAttributes, TripDiscountCreationAttributes } from "./trip_discount";
+import { TripDropoff as _TripDropoff } from "./trip_dropoff";
+import type { TripDropoffAttributes, TripDropoffCreationAttributes } from "./trip_dropoff";
+import { TripPickup as _TripPickup } from "./trip_pickup";
+import type { TripPickupAttributes, TripPickupCreationAttributes } from "./trip_pickup";
 import { TripPromo as _TripPromo } from "./trip_promo";
 import type { TripPromoAttributes, TripPromoCreationAttributes } from "./trip_promo";
 import { TripSeat as _TripSeat } from "./trip_seat";
@@ -151,6 +155,8 @@ export {
   _TransactionPayoutRequest as TransactionPayoutRequest,
   _TripBus as TripBus,
   _TripDiscount as TripDiscount,
+  _TripDropoff as TripDropoff,
+  _TripPickup as TripPickup,
   _TripPromo as TripPromo,
   _TripSeat as TripSeat,
   _UserBankAccount as UserBankAccount,
@@ -253,6 +259,10 @@ export type {
   TripBusCreationAttributes,
   TripDiscountAttributes,
   TripDiscountCreationAttributes,
+  TripDropoffAttributes,
+  TripDropoffCreationAttributes,
+  TripPickupAttributes,
+  TripPickupCreationAttributes,
   TripPromoAttributes,
   TripPromoCreationAttributes,
   TripSeatAttributes,
@@ -310,6 +320,8 @@ export function initModels(sequelize: Sequelize) {
   const TransactionPayoutRequest = _TransactionPayoutRequest.initModel(sequelize);
   const TripBus = _TripBus.initModel(sequelize);
   const TripDiscount = _TripDiscount.initModel(sequelize);
+  const TripDropoff = _TripDropoff.initModel(sequelize);
+  const TripPickup = _TripPickup.initModel(sequelize);
   const TripPromo = _TripPromo.initModel(sequelize);
   const TripSeat = _TripSeat.initModel(sequelize);
   const UserBankAccount = _UserBankAccount.initModel(sequelize);
@@ -374,6 +386,10 @@ export function initModels(sequelize: Sequelize) {
   AppLocation.hasMany(PartnerBranch, { foreignKey: "locId"});
   PartnerLocation.belongsTo(AppLocation, { foreignKey: "locId"});
   AppLocation.hasMany(PartnerLocation, { foreignKey: "locId"});
+  TripDropoff.belongsTo(AppLocation, { foreignKey: "locId"});
+  AppLocation.hasMany(TripDropoff, { foreignKey: "locId"});
+  TripPickup.belongsTo(AppLocation, { foreignKey: "locId"});
+  AppLocation.hasMany(TripPickup, { foreignKey: "locId"});
   AppAgent.belongsTo(AppPartner, { foreignKey: "partnerId"});
   AppPartner.hasMany(AppAgent, { foreignKey: "partnerId"});
   AppBus.belongsTo(AppPartner, { foreignKey: "partnerId"});
@@ -402,8 +418,8 @@ export function initModels(sequelize: Sequelize) {
   AppStatus.hasMany(AppTransaction, { foreignKey: "statusId"});
   AppTrip.belongsTo(AppStatus, { foreignKey: "statusId"});
   AppStatus.hasMany(AppTrip, { foreignKey: "statusId"});
-  AppBus.belongsTo(AppText, { foreignKey: "busDescTextId"});
-  AppText.hasMany(AppBus, { foreignKey: "busDescTextId"});
+  AppBus.belongsTo(AppText, { foreignKey: "descTextId"});
+  AppText.hasMany(AppBus, { foreignKey: "descTextId"});
   AppDiscount.belongsTo(AppText, { foreignKey: "discountDescTextId"});
   AppText.hasMany(AppDiscount, { foreignKey: "discountDescTextId"});
   AppPromo.belongsTo(AppText, { foreignKey: "promoDescTextId"});
@@ -412,6 +428,8 @@ export function initModels(sequelize: Sequelize) {
   AppText.hasMany(TicketType, { foreignKey: "textId"});
   AppTrip.belongsTo(AppTicket, { foreignKey: "ticketId"});
   AppTicket.hasMany(AppTrip, { foreignKey: "ticketId"});
+  BookingTripTicket.belongsTo(AppTicket, { foreignKey: "ticketId"});
+  AppTicket.hasMany(BookingTripTicket, { foreignKey: "ticketId"});
   BookingTripTicket.belongsTo(AppTicket, { foreignKey: "ticketTypeId"});
   AppTicket.hasMany(BookingTripTicket, { foreignKey: "ticketTypeId"});
   TransactionBooking.belongsTo(AppTransaction, { foreignKey: "transactionId"});
@@ -428,6 +446,10 @@ export function initModels(sequelize: Sequelize) {
   AppTrip.hasMany(TripBus, { foreignKey: "agentId"});
   TripBus.belongsTo(AppTrip, { foreignKey: "busTypeId"});
   AppTrip.hasMany(TripBus, { foreignKey: "busTypeId"});
+  TripDropoff.belongsTo(AppTrip, { foreignKey: "tripId"});
+  AppTrip.hasMany(TripDropoff, { foreignKey: "tripId"});
+  TripPickup.belongsTo(AppTrip, { foreignKey: "tripId"});
+  AppTrip.hasMany(TripPickup, { foreignKey: "tripId"});
   TripSeat.belongsTo(AppTrip, { foreignKey: "tripId"});
   AppTrip.hasMany(TripSeat, { foreignKey: "tripId"});
   AppAgent.belongsTo(AppUser, { foreignKey: "userId"});
@@ -470,6 +492,10 @@ export function initModels(sequelize: Sequelize) {
   TransactionPayinRequest.hasOne(TransactionPayin, { foreignKey: "requestId"});
   TransactionPayout.belongsTo(TransactionPayoutRequest, { foreignKey: "requestId"});
   TransactionPayoutRequest.hasOne(TransactionPayout, { foreignKey: "requestId"});
+  BookingTrip.belongsTo(TripDropoff, { foreignKey: "dropoffId"});
+  TripDropoff.hasMany(BookingTrip, { foreignKey: "dropoffId"});
+  BookingTrip.belongsTo(TripPickup, { foreignKey: "pickupId"});
+  TripPickup.hasMany(BookingTrip, { foreignKey: "pickupId"});
 
   return {
     AppAgent: AppAgent,
@@ -520,6 +546,8 @@ export function initModels(sequelize: Sequelize) {
     TransactionPayoutRequest: TransactionPayoutRequest,
     TripBus: TripBus,
     TripDiscount: TripDiscount,
+    TripDropoff: TripDropoff,
+    TripPickup: TripPickup,
     TripPromo: TripPromo,
     TripSeat: TripSeat,
     UserBankAccount: UserBankAccount,

@@ -17,7 +17,7 @@ export interface AppTextAttributes {
 
 export type AppTextPk = "textId";
 export type AppTextId = AppText[AppTextPk];
-export type AppTextOptionalAttributes = "langCode" | "createdAt" | "updatedAt";
+export type AppTextOptionalAttributes = "textId" | "langCode" | "createdAt" | "updatedAt";
 export type AppTextCreationAttributes = Optional<AppTextAttributes, AppTextOptionalAttributes>;
 
 export class AppText extends Model<AppTextAttributes, AppTextCreationAttributes> implements AppTextAttributes {
@@ -33,7 +33,7 @@ export class AppText extends Model<AppTextAttributes, AppTextCreationAttributes>
   getLangCodeAppLanguage!: Sequelize.BelongsToGetAssociationMixin<AppLanguage>;
   setLangCodeAppLanguage!: Sequelize.BelongsToSetAssociationMixin<AppLanguage, AppLanguageId>;
   createLangCodeAppLanguage!: Sequelize.BelongsToCreateAssociationMixin<AppLanguage>;
-  // AppText hasMany AppBus via busDescTextId
+  // AppText hasMany AppBus via descTextId
   appBuses!: AppBus[];
   getAppBuses!: Sequelize.HasManyGetAssociationsMixin<AppBus>;
   setAppBuses!: Sequelize.HasManySetAssociationsMixin<AppBus, AppBusId>;
@@ -85,6 +85,7 @@ export class AppText extends Model<AppTextAttributes, AppTextCreationAttributes>
   static initModel(sequelize: Sequelize.Sequelize): typeof AppText {
     return sequelize.define('AppText', {
     textId: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,

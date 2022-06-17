@@ -5,6 +5,8 @@ import type { AppTrip, AppTripId } from './app_trip';
 import type { LocationType, LocationTypeId } from './location_type';
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
 import type { PartnerLocation, PartnerLocationId } from './partner_location';
+import type { TripDropoff, TripDropoffId } from './trip_dropoff';
+import type { TripPickup, TripPickupId } from './trip_pickup';
 
 export interface AppLocationAttributes {
   locId: number;
@@ -87,6 +89,30 @@ export class AppLocation extends Model<AppLocationAttributes, AppLocationCreatio
   hasPartnerLocation!: Sequelize.HasManyHasAssociationMixin<PartnerLocation, PartnerLocationId>;
   hasPartnerLocations!: Sequelize.HasManyHasAssociationsMixin<PartnerLocation, PartnerLocationId>;
   countPartnerLocations!: Sequelize.HasManyCountAssociationsMixin;
+  // AppLocation hasMany TripDropoff via locId
+  tripDropoffs!: TripDropoff[];
+  getTripDropoffs!: Sequelize.HasManyGetAssociationsMixin<TripDropoff>;
+  setTripDropoffs!: Sequelize.HasManySetAssociationsMixin<TripDropoff, TripDropoffId>;
+  addTripDropoff!: Sequelize.HasManyAddAssociationMixin<TripDropoff, TripDropoffId>;
+  addTripDropoffs!: Sequelize.HasManyAddAssociationsMixin<TripDropoff, TripDropoffId>;
+  createTripDropoff!: Sequelize.HasManyCreateAssociationMixin<TripDropoff>;
+  removeTripDropoff!: Sequelize.HasManyRemoveAssociationMixin<TripDropoff, TripDropoffId>;
+  removeTripDropoffs!: Sequelize.HasManyRemoveAssociationsMixin<TripDropoff, TripDropoffId>;
+  hasTripDropoff!: Sequelize.HasManyHasAssociationMixin<TripDropoff, TripDropoffId>;
+  hasTripDropoffs!: Sequelize.HasManyHasAssociationsMixin<TripDropoff, TripDropoffId>;
+  countTripDropoffs!: Sequelize.HasManyCountAssociationsMixin;
+  // AppLocation hasMany TripPickup via locId
+  tripPickups!: TripPickup[];
+  getTripPickups!: Sequelize.HasManyGetAssociationsMixin<TripPickup>;
+  setTripPickups!: Sequelize.HasManySetAssociationsMixin<TripPickup, TripPickupId>;
+  addTripPickup!: Sequelize.HasManyAddAssociationMixin<TripPickup, TripPickupId>;
+  addTripPickups!: Sequelize.HasManyAddAssociationsMixin<TripPickup, TripPickupId>;
+  createTripPickup!: Sequelize.HasManyCreateAssociationMixin<TripPickup>;
+  removeTripPickup!: Sequelize.HasManyRemoveAssociationMixin<TripPickup, TripPickupId>;
+  removeTripPickups!: Sequelize.HasManyRemoveAssociationsMixin<TripPickup, TripPickupId>;
+  hasTripPickup!: Sequelize.HasManyHasAssociationMixin<TripPickup, TripPickupId>;
+  hasTripPickups!: Sequelize.HasManyHasAssociationsMixin<TripPickup, TripPickupId>;
+  countTripPickups!: Sequelize.HasManyCountAssociationsMixin;
   // AppLocation belongsTo LocationType via typeId
   type!: LocationType;
   getType!: Sequelize.BelongsToGetAssociationMixin<LocationType>;

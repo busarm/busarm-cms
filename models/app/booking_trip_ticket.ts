@@ -32,6 +32,11 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
   getBooking!: Sequelize.BelongsToGetAssociationMixin<AppBooking>;
   setBooking!: Sequelize.BelongsToSetAssociationMixin<AppBooking, AppBookingId>;
   createBooking!: Sequelize.BelongsToCreateAssociationMixin<AppBooking>;
+  // BookingTripTicket belongsTo AppTicket via ticketId
+  ticket!: AppTicket;
+  getTicket!: Sequelize.BelongsToGetAssociationMixin<AppTicket>;
+  setTicket!: Sequelize.BelongsToSetAssociationMixin<AppTicket, AppTicketId>;
+  createTicket!: Sequelize.BelongsToCreateAssociationMixin<AppTicket>;
   // BookingTripTicket belongsTo AppTicket via ticketTypeId
   ticketType!: AppTicket;
   getTicketType!: Sequelize.BelongsToGetAssociationMixin<AppTicket>;
@@ -58,6 +63,10 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
     ticketId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'app_tickets',
+        key: 'ticket_id'
+      },
       field: 'ticket_id'
     },
     ticketTypeId: {
@@ -111,13 +120,6 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
         using: "BTREE",
         fields: [
           { name: "ticket_id" },
-          { name: "ticket_type_id" },
-        ]
-      },
-      {
-        name: "ticket_type_id",
-        using: "BTREE",
-        fields: [
           { name: "ticket_type_id" },
         ]
       },

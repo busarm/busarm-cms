@@ -43,7 +43,7 @@ export class SequelizeResource extends AdminJsSequelizeResource {
                 }
             }
             let attr = this.rawAttributes()[property.name()]
-            if ((attr && attr.primaryKey && (attr.autoIncrement || attr.autoIncrementIdentity) || !property.isEditable)) {
+            if (!property.isEditable) {
                 delete parsedParams[property.name()];
             }
         });
@@ -63,7 +63,7 @@ export interface Navigation {
 
 /**
  * @param {String} name
- * @param {String} icon
+ * @param {String} icon see (https://carbondesignsystem.com/guidelines/icons/library/)
  * @returns {Navigation}
  */
 export const Nav = (name: string = "Content", icon?: string): Navigation => {
@@ -71,6 +71,15 @@ export const Nav = (name: string = "Content", icon?: string): Navigation => {
         name,
         icon,
     };
+};
+
+/**
+ * Get Nav groups
+ */
+export const Groups: { [s in string]: Navigation } = {
+    access: Nav('Access Management', 'Credentials'),
+    app: Nav('App Management', 'Application'),
+    oauth: Nav('OAuth Management', 'IdManagement'),
 };
 
 /**
@@ -188,6 +197,12 @@ export const DefaultResource = (
             (attr.primaryKey || attr.type.constructor.name != DataTypes.STRING.name || length < 256) &&
             listCount < config.adminjs.max_list_count;
         const isBoolean = attr.type.constructor.name == DataTypes.TINYINT.name || attr.type.constructor.name == DataTypes.BOOLEAN.name;
+        const isNumeric = attr.type.constructor.name == DataTypes.INTEGER.name ||
+            attr.type.constructor.name == DataTypes.SMALLINT.name ||
+            attr.type.constructor.name == DataTypes.MEDIUMINT.name ||
+            attr.type.constructor.name == DataTypes.BIGINT.name;
+        const isFloat = attr.type.constructor.name == DataTypes.FLOAT.name ||
+            attr.type.constructor.name == DataTypes.DOUBLE.name;
 
         // Add props
         props[key] = {
@@ -204,7 +219,7 @@ export const DefaultResource = (
                 show: canShow,
             },
             position: 100 + (index + 1),
-            type: isBoolean ? 'boolean' : undefined
+            type: isBoolean ? 'boolean' : isNumeric ? 'number' : isFloat ? 'float' : undefined,
         };
         if (attr.type.constructor.name === DataTypes.TEXT.name || length >= 1024) {
             props[key].type = "textarea";

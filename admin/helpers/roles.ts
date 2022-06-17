@@ -6,6 +6,7 @@ export enum AccessRoles {
     DEVELOPER = "Developer",
     MANAGER = "Manager",
     VIEWER = "Viewer",
+    USER = "User",
 }
 
 // Roles Permission List
@@ -40,6 +41,11 @@ export const RolePermissions: {[k in AccessRoles] :  AccessPermissions[]} = {
     [AccessRoles.VIEWER]: [
         AccessPermissions.ACCESS_ADMIN,
         AccessPermissions.VIEW_APP,
+        AccessPermissions.VIEW_SYSTEM,
+        AccessPermissions.VIEW_DASHBORD,
+    ],
+    [AccessRoles.USER]: [
+        AccessPermissions.ACCESS_ADMIN,
         AccessPermissions.VIEW_SYSTEM,
         AccessPermissions.VIEW_DASHBORD,
     ],

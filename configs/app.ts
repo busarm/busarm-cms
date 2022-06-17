@@ -62,5 +62,6 @@ export default {
     admin: {
         username: process.env.ADMIN_DEFAULT_USERNAME,
         password: process.env.ADMIN_DEFAULT_PASSWORD,
+        max_retry: 5
     },
 };

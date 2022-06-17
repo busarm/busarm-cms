@@ -2,9 +2,13 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppBooking, AppBookingId } from './app_booking';
 import type { AppTrip, AppTripId } from './app_trip';
+import type { TripDropoff, TripDropoffId } from './trip_dropoff';
+import type { TripPickup, TripPickupId } from './trip_pickup';
 
 export interface BookingTripAttributes {
   bookingId: string;
+  pickupId: number;
+  dropoffId: number;
   tripId: number;
   referenceCode: string;
   qrcodeUrl?: string;
@@ -20,6 +24,8 @@ export type BookingTripCreationAttributes = Optional<BookingTripAttributes, Book
 
 export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreationAttributes> implements BookingTripAttributes {
   bookingId!: string;
+  pickupId!: number;
+  dropoffId!: number;
   tripId!: number;
   referenceCode!: string;
   qrcodeUrl?: string;
@@ -37,6 +43,16 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
   getTrip!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
   setTrip!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
   createTrip!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
+  // BookingTrip belongsTo TripDropoff via dropoffId
+  dropoff!: TripDropoff;
+  getDropoff!: Sequelize.BelongsToGetAssociationMixin<TripDropoff>;
+  setDropoff!: Sequelize.BelongsToSetAssociationMixin<TripDropoff, TripDropoffId>;
+  createDropoff!: Sequelize.BelongsToCreateAssociationMixin<TripDropoff>;
+  // BookingTrip belongsTo TripPickup via pickupId
+  pickup!: TripPickup;
+  getPickup!: Sequelize.BelongsToGetAssociationMixin<TripPickup>;
+  setPickup!: Sequelize.BelongsToSetAssociationMixin<TripPickup, TripPickupId>;
+  createPickup!: Sequelize.BelongsToCreateAssociationMixin<TripPickup>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof BookingTrip {
     return sequelize.define('BookingTrip', {
@@ -49,6 +65,24 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
         key: 'booking_id'
       },
       field: 'booking_id'
+    },
+    pickupId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'trip_pickup',
+        key: 'id'
+      },
+      field: 'pickup_id'
+    },
+    dropoffId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'trip_dropoff',
+        key: 'id'
+      },
+      field: 'dropoff_id'
     },
     tripId: {
       type: DataTypes.INTEGER,
@@ -111,6 +145,20 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
         using: "BTREE",
         fields: [
           { name: "trip_id" },
+        ]
+      },
+      {
+        name: "pickup_id",
+        using: "BTREE",
+        fields: [
+          { name: "pickup_id" },
+        ]
+      },
+      {
+        name: "dropoff_id",
+        using: "BTREE",
+        fields: [
+          { name: "dropoff_id" },
         ]
       },
     ]

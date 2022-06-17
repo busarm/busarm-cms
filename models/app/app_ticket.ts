@@ -48,7 +48,7 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
   hasAppTrip!: Sequelize.HasManyHasAssociationMixin<AppTrip, AppTripId>;
   hasAppTrips!: Sequelize.HasManyHasAssociationsMixin<AppTrip, AppTripId>;
   countAppTrips!: Sequelize.HasManyCountAssociationsMixin;
-  // AppTicket hasMany BookingTripTicket via ticketTypeId
+  // AppTicket hasMany BookingTripTicket via ticketId
   bookingTripTickets!: BookingTripTicket[];
   getBookingTripTickets!: Sequelize.HasManyGetAssociationsMixin<BookingTripTicket>;
   setBookingTripTickets!: Sequelize.HasManySetAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
@@ -60,6 +60,18 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
   hasBookingTripTicket!: Sequelize.HasManyHasAssociationMixin<BookingTripTicket, BookingTripTicketId>;
   hasBookingTripTickets!: Sequelize.HasManyHasAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
   countBookingTripTickets!: Sequelize.HasManyCountAssociationsMixin;
+  // AppTicket hasMany BookingTripTicket via ticketTypeId
+  ticketTypeBookingTripTickets!: BookingTripTicket[];
+  getTicketTypeBookingTripTickets!: Sequelize.HasManyGetAssociationsMixin<BookingTripTicket>;
+  setTicketTypeBookingTripTickets!: Sequelize.HasManySetAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
+  addTicketTypeBookingTripTicket!: Sequelize.HasManyAddAssociationMixin<BookingTripTicket, BookingTripTicketId>;
+  addTicketTypeBookingTripTickets!: Sequelize.HasManyAddAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
+  createTicketTypeBookingTripTicket!: Sequelize.HasManyCreateAssociationMixin<BookingTripTicket>;
+  removeTicketTypeBookingTripTicket!: Sequelize.HasManyRemoveAssociationMixin<BookingTripTicket, BookingTripTicketId>;
+  removeTicketTypeBookingTripTickets!: Sequelize.HasManyRemoveAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
+  hasTicketTypeBookingTripTicket!: Sequelize.HasManyHasAssociationMixin<BookingTripTicket, BookingTripTicketId>;
+  hasTicketTypeBookingTripTickets!: Sequelize.HasManyHasAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
+  countTicketTypeBookingTripTickets!: Sequelize.HasManyCountAssociationsMixin;
   // AppTicket belongsTo TicketType via ticketTypeId
   ticketType!: TicketType;
   getTicketType!: Sequelize.BelongsToGetAssociationMixin<TicketType>;
