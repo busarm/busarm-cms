@@ -4,22 +4,22 @@ import type { AppText, AppTextId } from './app_text';
 import type { AppTicket, AppTicketId } from './app_ticket';
 
 export interface TicketTypeAttributes {
-  ticketTypeId: number;
-  ticketTypeName: string;
+  typeId: number;
+  typeName: string;
   textId: number;
   isDefault?: number;
   createdAt: Date;
   updatedAt?: Date;
 }
 
-export type TicketTypePk = "ticketTypeId";
+export type TicketTypePk = "typeId";
 export type TicketTypeId = TicketType[TicketTypePk];
-export type TicketTypeOptionalAttributes = "ticketTypeId" | "isDefault" | "createdAt" | "updatedAt";
+export type TicketTypeOptionalAttributes = "typeId" | "isDefault" | "createdAt" | "updatedAt";
 export type TicketTypeCreationAttributes = Optional<TicketTypeAttributes, TicketTypeOptionalAttributes>;
 
 export class TicketType extends Model<TicketTypeAttributes, TicketTypeCreationAttributes> implements TicketTypeAttributes {
-  ticketTypeId!: number;
-  ticketTypeName!: string;
+  typeId!: number;
+  typeName!: string;
   textId!: number;
   isDefault?: number;
   createdAt!: Date;
@@ -30,7 +30,7 @@ export class TicketType extends Model<TicketTypeAttributes, TicketTypeCreationAt
   getText!: Sequelize.BelongsToGetAssociationMixin<AppText>;
   setText!: Sequelize.BelongsToSetAssociationMixin<AppText, AppTextId>;
   createText!: Sequelize.BelongsToCreateAssociationMixin<AppText>;
-  // TicketType hasMany AppTicket via ticketTypeId
+  // TicketType hasMany AppTicket via typeId
   appTickets!: AppTicket[];
   getAppTickets!: Sequelize.HasManyGetAssociationsMixin<AppTicket>;
   setAppTickets!: Sequelize.HasManySetAssociationsMixin<AppTicket, AppTicketId>;
@@ -45,17 +45,17 @@ export class TicketType extends Model<TicketTypeAttributes, TicketTypeCreationAt
 
   static initModel(sequelize: Sequelize.Sequelize): typeof TicketType {
     return sequelize.define('TicketType', {
-    ticketTypeId: {
+    typeId: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      field: 'ticket_type_id'
+      field: 'type_id'
     },
-    ticketTypeName: {
+    typeName: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      field: 'ticket_type_name'
+      field: 'type_name'
     },
     textId: {
       type: DataTypes.INTEGER,
@@ -92,7 +92,7 @@ export class TicketType extends Model<TicketTypeAttributes, TicketTypeCreationAt
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "ticket_type_id" },
+          { name: "type_id" },
         ]
       },
       {

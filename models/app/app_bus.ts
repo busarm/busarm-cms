@@ -78,7 +78,7 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
   hasPartnerSharedBus!: Sequelize.HasManyHasAssociationMixin<PartnerSharedBus, PartnerSharedBusId>;
   hasPartnerSharedBuses!: Sequelize.HasManyHasAssociationsMixin<PartnerSharedBus, PartnerSharedBusId>;
   countPartnerSharedBuses!: Sequelize.HasManyCountAssociationsMixin;
-  // AppBus hasMany TripBus via partnerId
+  // AppBus hasMany TripBus via busId
   tripBuses!: TripBus[];
   getTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
   setTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
@@ -90,18 +90,6 @@ export class AppBus extends Model<AppBusAttributes, AppBusCreationAttributes> im
   hasTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
   hasTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
   countTripBuses!: Sequelize.HasManyCountAssociationsMixin;
-  // AppBus hasMany TripBus via busId
-  busTripBuses!: TripBus[];
-  getBusTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
-  setBusTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
-  addBusTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
-  addBusTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
-  createBusTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
-  removeBusTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
-  removeBusTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
-  hasBusTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
-  hasBusTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
-  countBusTripBuses!: Sequelize.HasManyCountAssociationsMixin;
   // AppBus belongsTo AppCountry via countryCode
   countryCodeAppCountry!: AppCountry;
   getCountryCodeAppCountry!: Sequelize.BelongsToGetAssociationMixin<AppCountry>;

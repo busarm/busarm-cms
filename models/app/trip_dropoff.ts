@@ -36,7 +36,7 @@ export class TripDropoff extends Model<TripDropoffAttributes, TripDropoffCreatio
   getTrip!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
   setTrip!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
   createTrip!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
-  // TripDropoff hasMany BookingTrip via dropoffId
+  // TripDropoff hasMany BookingTrip via tripId
   bookingTrips!: BookingTrip[];
   getBookingTrips!: Sequelize.HasManyGetAssociationsMixin<BookingTrip>;
   setBookingTrips!: Sequelize.HasManySetAssociationsMixin<BookingTrip, BookingTripId>;

@@ -328,6 +328,8 @@ export function initModels(sequelize: Sequelize) {
 
   AppTrip.belongsTo(AppAgent, { foreignKey: "agentId"});
   AppAgent.hasMany(AppTrip, { foreignKey: "agentId"});
+  TripBus.belongsTo(AppAgent, { foreignKey: "agentId"});
+  AppAgent.hasMany(TripBus, { foreignKey: "agentId"});
   BookingDiscount.belongsTo(AppBooking, { foreignKey: "bookingId"});
   AppBooking.hasOne(BookingDiscount, { foreignKey: "bookingId"});
   BookingPromo.belongsTo(AppBooking, { foreignKey: "bookingId"});
@@ -344,8 +346,6 @@ export function initModels(sequelize: Sequelize) {
   AppBus.hasMany(BusImage, { foreignKey: "busId"});
   PartnerSharedBus.belongsTo(AppBus, { foreignKey: "busId"});
   AppBus.hasMany(PartnerSharedBus, { foreignKey: "busId"});
-  TripBus.belongsTo(AppBus, { foreignKey: "partnerId"});
-  AppBus.hasMany(TripBus, { foreignKey: "partnerId"});
   TripBus.belongsTo(AppBus, { foreignKey: "busId"});
   AppBus.hasMany(TripBus, { foreignKey: "busId"});
   AppLocation.belongsTo(AppCity, { foreignKey: "cityId"});
@@ -382,6 +382,10 @@ export function initModels(sequelize: Sequelize) {
   AppLocation.hasMany(AppTrip, { foreignKey: "dropoffLocId"});
   AppTrip.belongsTo(AppLocation, { foreignKey: "pickupLocId"});
   AppLocation.hasMany(AppTrip, { foreignKey: "pickupLocId"});
+  BookingTrip.belongsTo(AppLocation, { foreignKey: "pickupLocId"});
+  AppLocation.hasMany(BookingTrip, { foreignKey: "pickupLocId"});
+  BookingTrip.belongsTo(AppLocation, { foreignKey: "dropoffLocId"});
+  AppLocation.hasMany(BookingTrip, { foreignKey: "dropoffLocId"});
   PartnerBranch.belongsTo(AppLocation, { foreignKey: "locId"});
   AppLocation.hasMany(PartnerBranch, { foreignKey: "locId"});
   PartnerLocation.belongsTo(AppLocation, { foreignKey: "locId"});
@@ -402,6 +406,8 @@ export function initModels(sequelize: Sequelize) {
   AppPartner.hasMany(PartnerLocation, { foreignKey: "partnerId"});
   PartnerSharedBus.belongsTo(AppPartner, { foreignKey: "partnerId"});
   AppPartner.hasMany(PartnerSharedBus, { foreignKey: "partnerId"});
+  TripBus.belongsTo(AppPartner, { foreignKey: "partnerId"});
+  AppPartner.hasMany(TripBus, { foreignKey: "partnerId"});
   AppTransaction.belongsTo(AppPaymentMethod, { foreignKey: "transactionMethod"});
   AppPaymentMethod.hasMany(AppTransaction, { foreignKey: "transactionMethod"});
   CountryPaymentMethod.belongsTo(AppPaymentMethod, { foreignKey: "methodId"});
@@ -430,22 +436,14 @@ export function initModels(sequelize: Sequelize) {
   AppTicket.hasMany(AppTrip, { foreignKey: "ticketId"});
   BookingTripTicket.belongsTo(AppTicket, { foreignKey: "ticketId"});
   AppTicket.hasMany(BookingTripTicket, { foreignKey: "ticketId"});
-  BookingTripTicket.belongsTo(AppTicket, { foreignKey: "ticketTypeId"});
-  AppTicket.hasMany(BookingTripTicket, { foreignKey: "ticketTypeId"});
   TransactionBooking.belongsTo(AppTransaction, { foreignKey: "transactionId"});
   AppTransaction.hasOne(TransactionBooking, { foreignKey: "transactionId"});
   TransactionPayin.belongsTo(AppTransaction, { foreignKey: "transactionId"});
   AppTransaction.hasOne(TransactionPayin, { foreignKey: "transactionId"});
   TransactionPayout.belongsTo(AppTransaction, { foreignKey: "transactionId"});
   AppTransaction.hasOne(TransactionPayout, { foreignKey: "transactionId"});
-  BookingTrip.belongsTo(AppTrip, { foreignKey: "tripId"});
-  AppTrip.hasMany(BookingTrip, { foreignKey: "tripId"});
   TripBus.belongsTo(AppTrip, { foreignKey: "tripId"});
   AppTrip.hasOne(TripBus, { foreignKey: "tripId"});
-  TripBus.belongsTo(AppTrip, { foreignKey: "agentId"});
-  AppTrip.hasMany(TripBus, { foreignKey: "agentId"});
-  TripBus.belongsTo(AppTrip, { foreignKey: "busTypeId"});
-  AppTrip.hasMany(TripBus, { foreignKey: "busTypeId"});
   TripDropoff.belongsTo(AppTrip, { foreignKey: "tripId"});
   AppTrip.hasMany(TripDropoff, { foreignKey: "tripId"});
   TripPickup.belongsTo(AppTrip, { foreignKey: "tripId"});
@@ -476,6 +474,8 @@ export function initModels(sequelize: Sequelize) {
   BusType.hasMany(AppBus, { foreignKey: "typeId"});
   AppTrip.belongsTo(BusType, { foreignKey: "busTypeId"});
   BusType.hasMany(AppTrip, { foreignKey: "busTypeId"});
+  TripBus.belongsTo(BusType, { foreignKey: "busTypeId"});
+  BusType.hasMany(TripBus, { foreignKey: "busTypeId"});
   AppEnquiry.belongsTo(EnquiryType, { foreignKey: "typeId"});
   EnquiryType.hasMany(AppEnquiry, { foreignKey: "typeId"});
   AppLocation.belongsTo(LocationType, { foreignKey: "typeId"});
@@ -486,16 +486,14 @@ export function initModels(sequelize: Sequelize) {
   PromoType.hasMany(AppPromo, { foreignKey: "promoTypeId"});
   AppStatus.belongsTo(StatusType, { foreignKey: "typeId"});
   StatusType.hasMany(AppStatus, { foreignKey: "typeId"});
-  AppTicket.belongsTo(TicketType, { foreignKey: "ticketTypeId"});
-  TicketType.hasMany(AppTicket, { foreignKey: "ticketTypeId"});
+  AppTicket.belongsTo(TicketType, { foreignKey: "typeId"});
+  TicketType.hasMany(AppTicket, { foreignKey: "typeId"});
   TransactionPayin.belongsTo(TransactionPayinRequest, { foreignKey: "requestId"});
   TransactionPayinRequest.hasOne(TransactionPayin, { foreignKey: "requestId"});
   TransactionPayout.belongsTo(TransactionPayoutRequest, { foreignKey: "requestId"});
   TransactionPayoutRequest.hasOne(TransactionPayout, { foreignKey: "requestId"});
-  BookingTrip.belongsTo(TripDropoff, { foreignKey: "dropoffId"});
-  TripDropoff.hasMany(BookingTrip, { foreignKey: "dropoffId"});
-  BookingTrip.belongsTo(TripPickup, { foreignKey: "pickupId"});
-  TripPickup.hasMany(BookingTrip, { foreignKey: "pickupId"});
+  BookingTrip.belongsTo(TripDropoff, { foreignKey: "tripId"});
+  TripDropoff.hasMany(BookingTrip, { foreignKey: "tripId"});
 
   return {
     AppAgent: AppAgent,

@@ -141,7 +141,6 @@ export function ModelResource(
         // Hide these models from the list
         case AccessMigration.name:
         case AppMigration.name:
-        case OauthJti.name:
         case OauthMigration.name:
             return false;
         default:
@@ -220,6 +219,7 @@ export const DefaultResource = (
             },
             position: 100 + (index + 1),
             type: isBoolean ? 'boolean' : isNumeric ? 'number' : isFloat ? 'float' : undefined,
+            reference: attr.references ? (typeof attr.references === 'string') ? attr.references : String(attr.references.model) : null
         };
         if (attr.type.constructor.name === DataTypes.TEXT.name || length >= 1024) {
             props[key].type = "textarea";

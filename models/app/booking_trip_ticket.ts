@@ -7,7 +7,6 @@ export interface BookingTripTicketAttributes {
   id: number;
   bookingId: string;
   ticketId: number;
-  ticketTypeId: number;
   qty: number;
   createdAt: Date;
   updatedAt?: Date;
@@ -22,7 +21,6 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
   id!: number;
   bookingId!: string;
   ticketId!: number;
-  ticketTypeId!: number;
   qty!: number;
   createdAt!: Date;
   updatedAt?: Date;
@@ -37,11 +35,6 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
   getTicket!: Sequelize.BelongsToGetAssociationMixin<AppTicket>;
   setTicket!: Sequelize.BelongsToSetAssociationMixin<AppTicket, AppTicketId>;
   createTicket!: Sequelize.BelongsToCreateAssociationMixin<AppTicket>;
-  // BookingTripTicket belongsTo AppTicket via ticketTypeId
-  ticketType!: AppTicket;
-  getTicketType!: Sequelize.BelongsToGetAssociationMixin<AppTicket>;
-  setTicketType!: Sequelize.BelongsToSetAssociationMixin<AppTicket, AppTicketId>;
-  createTicketType!: Sequelize.BelongsToCreateAssociationMixin<AppTicket>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof BookingTripTicket {
     return sequelize.define('BookingTripTicket', {
@@ -65,18 +58,9 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
       allowNull: false,
       references: {
         model: 'app_tickets',
-        key: 'ticket_id'
+        key: 'id'
       },
       field: 'ticket_id'
-    },
-    ticketTypeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'app_tickets',
-        key: 'ticket_type_id'
-      },
-      field: 'ticket_type_id'
     },
     qty: {
       type: DataTypes.INTEGER,
@@ -106,13 +90,19 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
         ]
       },
       {
-        name: "booking_id",
+        name: "booking_id_2",
         unique: true,
         using: "BTREE",
         fields: [
           { name: "booking_id" },
           { name: "ticket_id" },
-          { name: "ticket_type_id" },
+        ]
+      },
+      {
+        name: "booking_id",
+        using: "BTREE",
+        fields: [
+          { name: "booking_id" },
         ]
       },
       {
@@ -120,7 +110,6 @@ export class BookingTripTicket extends Model<BookingTripTicketAttributes, Bookin
         using: "BTREE",
         fields: [
           { name: "ticket_id" },
-          { name: "ticket_type_id" },
         ]
       },
     ]

@@ -1,14 +1,13 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppBooking, AppBookingId } from './app_booking';
-import type { AppTrip, AppTripId } from './app_trip';
+import type { AppLocation, AppLocationId } from './app_location';
 import type { TripDropoff, TripDropoffId } from './trip_dropoff';
-import type { TripPickup, TripPickupId } from './trip_pickup';
 
 export interface BookingTripAttributes {
   bookingId: string;
-  pickupId: number;
-  dropoffId: number;
+  pickupLocId?: number;
+  dropoffLocId?: number;
   tripId: number;
   referenceCode: string;
   qrcodeUrl?: string;
@@ -19,13 +18,13 @@ export interface BookingTripAttributes {
 
 export type BookingTripPk = "bookingId";
 export type BookingTripId = BookingTrip[BookingTripPk];
-export type BookingTripOptionalAttributes = "qrcodeUrl" | "createdAt" | "updatedAt";
+export type BookingTripOptionalAttributes = "pickupLocId" | "dropoffLocId" | "qrcodeUrl" | "createdAt" | "updatedAt";
 export type BookingTripCreationAttributes = Optional<BookingTripAttributes, BookingTripOptionalAttributes>;
 
 export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreationAttributes> implements BookingTripAttributes {
   bookingId!: string;
-  pickupId!: number;
-  dropoffId!: number;
+  pickupLocId?: number;
+  dropoffLocId?: number;
   tripId!: number;
   referenceCode!: string;
   qrcodeUrl?: string;
@@ -38,21 +37,21 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
   getBooking!: Sequelize.BelongsToGetAssociationMixin<AppBooking>;
   setBooking!: Sequelize.BelongsToSetAssociationMixin<AppBooking, AppBookingId>;
   createBooking!: Sequelize.BelongsToCreateAssociationMixin<AppBooking>;
-  // BookingTrip belongsTo AppTrip via tripId
-  trip!: AppTrip;
-  getTrip!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
-  setTrip!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
-  createTrip!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
-  // BookingTrip belongsTo TripDropoff via dropoffId
-  dropoff!: TripDropoff;
-  getDropoff!: Sequelize.BelongsToGetAssociationMixin<TripDropoff>;
-  setDropoff!: Sequelize.BelongsToSetAssociationMixin<TripDropoff, TripDropoffId>;
-  createDropoff!: Sequelize.BelongsToCreateAssociationMixin<TripDropoff>;
-  // BookingTrip belongsTo TripPickup via pickupId
-  pickup!: TripPickup;
-  getPickup!: Sequelize.BelongsToGetAssociationMixin<TripPickup>;
-  setPickup!: Sequelize.BelongsToSetAssociationMixin<TripPickup, TripPickupId>;
-  createPickup!: Sequelize.BelongsToCreateAssociationMixin<TripPickup>;
+  // BookingTrip belongsTo AppLocation via pickupLocId
+  pickupLoc!: AppLocation;
+  getPickupLoc!: Sequelize.BelongsToGetAssociationMixin<AppLocation>;
+  setPickupLoc!: Sequelize.BelongsToSetAssociationMixin<AppLocation, AppLocationId>;
+  createPickupLoc!: Sequelize.BelongsToCreateAssociationMixin<AppLocation>;
+  // BookingTrip belongsTo AppLocation via dropoffLocId
+  dropoffLoc!: AppLocation;
+  getDropoffLoc!: Sequelize.BelongsToGetAssociationMixin<AppLocation>;
+  setDropoffLoc!: Sequelize.BelongsToSetAssociationMixin<AppLocation, AppLocationId>;
+  createDropoffLoc!: Sequelize.BelongsToCreateAssociationMixin<AppLocation>;
+  // BookingTrip belongsTo TripDropoff via tripId
+  trip!: TripDropoff;
+  getTrip!: Sequelize.BelongsToGetAssociationMixin<TripDropoff>;
+  setTrip!: Sequelize.BelongsToSetAssociationMixin<TripDropoff, TripDropoffId>;
+  createTrip!: Sequelize.BelongsToCreateAssociationMixin<TripDropoff>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof BookingTrip {
     return sequelize.define('BookingTrip', {
@@ -66,29 +65,29 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
       },
       field: 'booking_id'
     },
-    pickupId: {
+    pickupLocId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'trip_pickup',
-        key: 'id'
+        model: 'app_locations',
+        key: 'loc_id'
       },
-      field: 'pickup_id'
+      field: 'pickup_loc_id'
     },
-    dropoffId: {
+    dropoffLocId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'trip_dropoff',
-        key: 'id'
+        model: 'app_locations',
+        key: 'loc_id'
       },
-      field: 'dropoff_id'
+      field: 'dropoff_loc_id'
     },
     tripId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'app_trips',
+        model: 'trip_dropoff',
         key: 'trip_id'
       },
       field: 'trip_id'
@@ -148,17 +147,33 @@ export class BookingTrip extends Model<BookingTripAttributes, BookingTripCreatio
         ]
       },
       {
-        name: "pickup_id",
+        name: "trip_id_2",
         using: "BTREE",
         fields: [
-          { name: "pickup_id" },
+          { name: "trip_id" },
+          { name: "pickup_loc_id" },
         ]
       },
       {
-        name: "dropoff_id",
+        name: "trip_id_3",
         using: "BTREE",
         fields: [
-          { name: "dropoff_id" },
+          { name: "trip_id" },
+          { name: "dropoff_loc_id" },
+        ]
+      },
+      {
+        name: "pickup_loc_id",
+        using: "BTREE",
+        fields: [
+          { name: "pickup_loc_id" },
+        ]
+      },
+      {
+        name: "dropoff_loc_id",
+        using: "BTREE",
+        fields: [
+          { name: "dropoff_loc_id" },
         ]
       },
     ]

@@ -7,6 +7,7 @@ import type { PartnerBankAccount, PartnerBankAccountCreationAttributes, PartnerB
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
 import type { PartnerLocation, PartnerLocationId } from './partner_location';
 import type { PartnerSharedBus, PartnerSharedBusId } from './partner_shared_bus';
+import type { TripBus, TripBusId } from './trip_bus';
 
 export interface AppPartnerAttributes {
   partnerId: number;
@@ -107,6 +108,18 @@ export class AppPartner extends Model<AppPartnerAttributes, AppPartnerCreationAt
   hasPartnerSharedBus!: Sequelize.HasManyHasAssociationMixin<PartnerSharedBus, PartnerSharedBusId>;
   hasPartnerSharedBuses!: Sequelize.HasManyHasAssociationsMixin<PartnerSharedBus, PartnerSharedBusId>;
   countPartnerSharedBuses!: Sequelize.HasManyCountAssociationsMixin;
+  // AppPartner hasMany TripBus via partnerId
+  tripBuses!: TripBus[];
+  getTripBuses!: Sequelize.HasManyGetAssociationsMixin<TripBus>;
+  setTripBuses!: Sequelize.HasManySetAssociationsMixin<TripBus, TripBusId>;
+  addTripBus!: Sequelize.HasManyAddAssociationMixin<TripBus, TripBusId>;
+  addTripBuses!: Sequelize.HasManyAddAssociationsMixin<TripBus, TripBusId>;
+  createTripBus!: Sequelize.HasManyCreateAssociationMixin<TripBus>;
+  removeTripBus!: Sequelize.HasManyRemoveAssociationMixin<TripBus, TripBusId>;
+  removeTripBuses!: Sequelize.HasManyRemoveAssociationsMixin<TripBus, TripBusId>;
+  hasTripBus!: Sequelize.HasManyHasAssociationMixin<TripBus, TripBusId>;
+  hasTripBuses!: Sequelize.HasManyHasAssociationsMixin<TripBus, TripBusId>;
+  countTripBuses!: Sequelize.HasManyCountAssociationsMixin;
   // AppPartner belongsTo AppUser via userId
   user!: AppUser;
   getUser!: Sequelize.BelongsToGetAssociationMixin<AppUser>;

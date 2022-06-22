@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppCity, AppCityId } from './app_city';
 import type { AppTrip, AppTripId } from './app_trip';
+import type { BookingTrip, BookingTripId } from './booking_trip';
 import type { LocationType, LocationTypeId } from './location_type';
 import type { PartnerBranch, PartnerBranchId } from './partner_branch';
 import type { PartnerLocation, PartnerLocationId } from './partner_location';
@@ -65,6 +66,30 @@ export class AppLocation extends Model<AppLocationAttributes, AppLocationCreatio
   hasPickupLocAppTrip!: Sequelize.HasManyHasAssociationMixin<AppTrip, AppTripId>;
   hasPickupLocAppTrips!: Sequelize.HasManyHasAssociationsMixin<AppTrip, AppTripId>;
   countPickupLocAppTrips!: Sequelize.HasManyCountAssociationsMixin;
+  // AppLocation hasMany BookingTrip via pickupLocId
+  bookingTrips!: BookingTrip[];
+  getBookingTrips!: Sequelize.HasManyGetAssociationsMixin<BookingTrip>;
+  setBookingTrips!: Sequelize.HasManySetAssociationsMixin<BookingTrip, BookingTripId>;
+  addBookingTrip!: Sequelize.HasManyAddAssociationMixin<BookingTrip, BookingTripId>;
+  addBookingTrips!: Sequelize.HasManyAddAssociationsMixin<BookingTrip, BookingTripId>;
+  createBookingTrip!: Sequelize.HasManyCreateAssociationMixin<BookingTrip>;
+  removeBookingTrip!: Sequelize.HasManyRemoveAssociationMixin<BookingTrip, BookingTripId>;
+  removeBookingTrips!: Sequelize.HasManyRemoveAssociationsMixin<BookingTrip, BookingTripId>;
+  hasBookingTrip!: Sequelize.HasManyHasAssociationMixin<BookingTrip, BookingTripId>;
+  hasBookingTrips!: Sequelize.HasManyHasAssociationsMixin<BookingTrip, BookingTripId>;
+  countBookingTrips!: Sequelize.HasManyCountAssociationsMixin;
+  // AppLocation hasMany BookingTrip via dropoffLocId
+  dropoffLocBookingTrips!: BookingTrip[];
+  getDropoffLocBookingTrips!: Sequelize.HasManyGetAssociationsMixin<BookingTrip>;
+  setDropoffLocBookingTrips!: Sequelize.HasManySetAssociationsMixin<BookingTrip, BookingTripId>;
+  addDropoffLocBookingTrip!: Sequelize.HasManyAddAssociationMixin<BookingTrip, BookingTripId>;
+  addDropoffLocBookingTrips!: Sequelize.HasManyAddAssociationsMixin<BookingTrip, BookingTripId>;
+  createDropoffLocBookingTrip!: Sequelize.HasManyCreateAssociationMixin<BookingTrip>;
+  removeDropoffLocBookingTrip!: Sequelize.HasManyRemoveAssociationMixin<BookingTrip, BookingTripId>;
+  removeDropoffLocBookingTrips!: Sequelize.HasManyRemoveAssociationsMixin<BookingTrip, BookingTripId>;
+  hasDropoffLocBookingTrip!: Sequelize.HasManyHasAssociationMixin<BookingTrip, BookingTripId>;
+  hasDropoffLocBookingTrips!: Sequelize.HasManyHasAssociationsMixin<BookingTrip, BookingTripId>;
+  countDropoffLocBookingTrips!: Sequelize.HasManyCountAssociationsMixin;
   // AppLocation hasMany PartnerBranch via locId
   partnerBranches!: PartnerBranch[];
   getPartnerBranches!: Sequelize.HasManyGetAssociationsMixin<PartnerBranch>;

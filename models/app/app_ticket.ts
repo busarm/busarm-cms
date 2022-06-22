@@ -8,8 +8,8 @@ import type { TicketType, TicketTypeId } from './ticket_type';
 export interface AppTicketAttributes {
   id: number;
   ticketId: number;
-  ticketTypeId: number;
-  ticketPrice: number;
+  typeId: number;
+  price: number;
   currencyCode?: string;
   isActive: number;
   createdAt: Date;
@@ -24,8 +24,8 @@ export type AppTicketCreationAttributes = Optional<AppTicketAttributes, AppTicke
 export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttributes> implements AppTicketAttributes {
   id!: number;
   ticketId!: number;
-  ticketTypeId!: number;
-  ticketPrice!: number;
+  typeId!: number;
+  price!: number;
   currencyCode?: string;
   isActive!: number;
   createdAt!: Date;
@@ -60,23 +60,11 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
   hasBookingTripTicket!: Sequelize.HasManyHasAssociationMixin<BookingTripTicket, BookingTripTicketId>;
   hasBookingTripTickets!: Sequelize.HasManyHasAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
   countBookingTripTickets!: Sequelize.HasManyCountAssociationsMixin;
-  // AppTicket hasMany BookingTripTicket via ticketTypeId
-  ticketTypeBookingTripTickets!: BookingTripTicket[];
-  getTicketTypeBookingTripTickets!: Sequelize.HasManyGetAssociationsMixin<BookingTripTicket>;
-  setTicketTypeBookingTripTickets!: Sequelize.HasManySetAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
-  addTicketTypeBookingTripTicket!: Sequelize.HasManyAddAssociationMixin<BookingTripTicket, BookingTripTicketId>;
-  addTicketTypeBookingTripTickets!: Sequelize.HasManyAddAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
-  createTicketTypeBookingTripTicket!: Sequelize.HasManyCreateAssociationMixin<BookingTripTicket>;
-  removeTicketTypeBookingTripTicket!: Sequelize.HasManyRemoveAssociationMixin<BookingTripTicket, BookingTripTicketId>;
-  removeTicketTypeBookingTripTickets!: Sequelize.HasManyRemoveAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
-  hasTicketTypeBookingTripTicket!: Sequelize.HasManyHasAssociationMixin<BookingTripTicket, BookingTripTicketId>;
-  hasTicketTypeBookingTripTickets!: Sequelize.HasManyHasAssociationsMixin<BookingTripTicket, BookingTripTicketId>;
-  countTicketTypeBookingTripTickets!: Sequelize.HasManyCountAssociationsMixin;
-  // AppTicket belongsTo TicketType via ticketTypeId
-  ticketType!: TicketType;
-  getTicketType!: Sequelize.BelongsToGetAssociationMixin<TicketType>;
-  setTicketType!: Sequelize.BelongsToSetAssociationMixin<TicketType, TicketTypeId>;
-  createTicketType!: Sequelize.BelongsToCreateAssociationMixin<TicketType>;
+  // AppTicket belongsTo TicketType via typeId
+  type!: TicketType;
+  getType!: Sequelize.BelongsToGetAssociationMixin<TicketType>;
+  setType!: Sequelize.BelongsToSetAssociationMixin<TicketType, TicketTypeId>;
+  createType!: Sequelize.BelongsToCreateAssociationMixin<TicketType>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof AppTicket {
     return sequelize.define('AppTicket', {
@@ -91,19 +79,18 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
       allowNull: false,
       field: 'ticket_id'
     },
-    ticketTypeId: {
+    typeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'ticket_types',
-        key: 'ticket_type_id'
+        key: 'type_id'
       },
-      field: 'ticket_type_id'
+      field: 'type_id'
     },
-    ticketPrice: {
+    price: {
       type: DataTypes.FLOAT,
-      allowNull: false,
-      field: 'ticket_price'
+      allowNull: false
     },
     currencyCode: {
       type: DataTypes.STRING(5),
@@ -149,7 +136,7 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
         using: "BTREE",
         fields: [
           { name: "ticket_id" },
-          { name: "ticket_type_id" },
+          { name: "type_id" },
         ]
       },
       {
@@ -160,10 +147,10 @@ export class AppTicket extends Model<AppTicketAttributes, AppTicketCreationAttri
         ]
       },
       {
-        name: "ticket_type_id",
+        name: "type_id",
         using: "BTREE",
         fields: [
-          { name: "ticket_type_id" },
+          { name: "type_id" },
         ]
       },
     ]

@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface OauthJtiAttributes {
+  id: number;
   issuer: string;
   subject?: string;
   audiance?: string;
@@ -9,10 +10,13 @@ export interface OauthJtiAttributes {
   jti: string;
 }
 
-export type OauthJtiOptionalAttributes = "subject" | "audiance";
+export type OauthJtiPk = "id";
+export type OauthJtiId = OauthJti[OauthJtiPk];
+export type OauthJtiOptionalAttributes = "id" | "subject" | "audiance";
 export type OauthJtiCreationAttributes = Optional<OauthJtiAttributes, OauthJtiOptionalAttributes>;
 
 export class OauthJti extends Model<OauthJtiAttributes, OauthJtiCreationAttributes> implements OauthJtiAttributes {
+  id!: number;
   issuer!: string;
   subject?: string;
   audiance?: string;
@@ -22,6 +26,12 @@ export class OauthJti extends Model<OauthJtiAttributes, OauthJtiCreationAttribut
 
   static initModel(sequelize: Sequelize.Sequelize): typeof OauthJti {
     return sequelize.define('OauthJti', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     issuer: {
       type: DataTypes.STRING(80),
       allowNull: false
@@ -44,7 +54,17 @@ export class OauthJti extends Model<OauthJtiAttributes, OauthJtiCreationAttribut
     }
   }, {
     tableName: 'oauth_jti',
-    timestamps: false
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+    ]
   }) as typeof OauthJti;
   }
 }

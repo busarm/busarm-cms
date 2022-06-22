@@ -1,7 +1,10 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { AppAgent, AppAgentId } from './app_agent';
 import type { AppBus, AppBusId } from './app_bus';
+import type { AppPartner, AppPartnerId } from './app_partner';
 import type { AppTrip, AppTripId } from './app_trip';
+import type { BusType, BusTypeId } from './bus_type';
 
 export interface TripBusAttributes {
   tripId: number;
@@ -27,31 +30,31 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
   createdAt!: Date;
   updatedAt?: Date;
 
-  // TripBus belongsTo AppBus via partnerId
-  partner!: AppBus;
-  getPartner!: Sequelize.BelongsToGetAssociationMixin<AppBus>;
-  setPartner!: Sequelize.BelongsToSetAssociationMixin<AppBus, AppBusId>;
-  createPartner!: Sequelize.BelongsToCreateAssociationMixin<AppBus>;
+  // TripBus belongsTo AppAgent via agentId
+  agent!: AppAgent;
+  getAgent!: Sequelize.BelongsToGetAssociationMixin<AppAgent>;
+  setAgent!: Sequelize.BelongsToSetAssociationMixin<AppAgent, AppAgentId>;
+  createAgent!: Sequelize.BelongsToCreateAssociationMixin<AppAgent>;
   // TripBus belongsTo AppBus via busId
   bus!: AppBus;
   getBus!: Sequelize.BelongsToGetAssociationMixin<AppBus>;
   setBus!: Sequelize.BelongsToSetAssociationMixin<AppBus, AppBusId>;
   createBus!: Sequelize.BelongsToCreateAssociationMixin<AppBus>;
+  // TripBus belongsTo AppPartner via partnerId
+  partner!: AppPartner;
+  getPartner!: Sequelize.BelongsToGetAssociationMixin<AppPartner>;
+  setPartner!: Sequelize.BelongsToSetAssociationMixin<AppPartner, AppPartnerId>;
+  createPartner!: Sequelize.BelongsToCreateAssociationMixin<AppPartner>;
   // TripBus belongsTo AppTrip via tripId
   trip!: AppTrip;
   getTrip!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
   setTrip!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
   createTrip!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
-  // TripBus belongsTo AppTrip via agentId
-  agent!: AppTrip;
-  getAgent!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
-  setAgent!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
-  createAgent!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
-  // TripBus belongsTo AppTrip via busTypeId
-  busType!: AppTrip;
-  getBusType!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
-  setBusType!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
-  createBusType!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
+  // TripBus belongsTo BusType via busTypeId
+  busType!: BusType;
+  getBusType!: Sequelize.BelongsToGetAssociationMixin<BusType>;
+  setBusType!: Sequelize.BelongsToSetAssociationMixin<BusType, BusTypeId>;
+  createBusType!: Sequelize.BelongsToCreateAssociationMixin<BusType>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof TripBus {
     return sequelize.define('TripBus', {
@@ -69,8 +72,8 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'app_trips',
-        key: 'bus_type_id'
+        model: 'bus_types',
+        key: 'type_id'
       },
       field: 'bus_type_id'
     },
@@ -87,7 +90,7 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'app_trips',
+        model: 'app_agents',
         key: 'agent_id'
       },
       field: 'agent_id'
@@ -96,7 +99,7 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'app_buses',
+        model: 'app_partners',
         key: 'partner_id'
       },
       field: 'partner_id'
@@ -138,7 +141,6 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
         fields: [
           { name: "bus_id" },
           { name: "partner_id" },
-          { name: "bus_type_id" },
         ]
       },
       {
@@ -148,6 +150,20 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
           { name: "trip_id" },
           { name: "bus_type_id" },
           { name: "agent_id" },
+        ]
+      },
+      {
+        name: "agent_id",
+        using: "BTREE",
+        fields: [
+          { name: "agent_id" },
+        ]
+      },
+      {
+        name: "bus_type_id",
+        using: "BTREE",
+        fields: [
+          { name: "bus_type_id" },
         ]
       },
     ]

@@ -122,6 +122,10 @@ export const AccessAuditResource = (
                     },
                 },
             },
+            sort: {
+                sortBy: "id",
+                direction: "desc"
+            }
         },
     };
 };

@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { AppLocation, AppLocationId } from './app_location';
 import type { AppTrip, AppTripId } from './app_trip';
-import type { BookingTrip, BookingTripId } from './booking_trip';
 
 export interface TripPickupAttributes {
   id: number;
@@ -36,18 +35,6 @@ export class TripPickup extends Model<TripPickupAttributes, TripPickupCreationAt
   getTrip!: Sequelize.BelongsToGetAssociationMixin<AppTrip>;
   setTrip!: Sequelize.BelongsToSetAssociationMixin<AppTrip, AppTripId>;
   createTrip!: Sequelize.BelongsToCreateAssociationMixin<AppTrip>;
-  // TripPickup hasMany BookingTrip via pickupId
-  bookingTrips!: BookingTrip[];
-  getBookingTrips!: Sequelize.HasManyGetAssociationsMixin<BookingTrip>;
-  setBookingTrips!: Sequelize.HasManySetAssociationsMixin<BookingTrip, BookingTripId>;
-  addBookingTrip!: Sequelize.HasManyAddAssociationMixin<BookingTrip, BookingTripId>;
-  addBookingTrips!: Sequelize.HasManyAddAssociationsMixin<BookingTrip, BookingTripId>;
-  createBookingTrip!: Sequelize.HasManyCreateAssociationMixin<BookingTrip>;
-  removeBookingTrip!: Sequelize.HasManyRemoveAssociationMixin<BookingTrip, BookingTripId>;
-  removeBookingTrips!: Sequelize.HasManyRemoveAssociationsMixin<BookingTrip, BookingTripId>;
-  hasBookingTrip!: Sequelize.HasManyHasAssociationMixin<BookingTrip, BookingTripId>;
-  hasBookingTrips!: Sequelize.HasManyHasAssociationsMixin<BookingTrip, BookingTripId>;
-  countBookingTrips!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof TripPickup {
     return sequelize.define('TripPickup', {
