@@ -11,36 +11,50 @@ import { Box, DropZone, Label } from '@adminjs/design-system';
  * @returns {JSX.Element}
  */
 const UploadFile: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.Element => {
-    const { property, record, onChange } = props;
+  const { property, record, onChange } = props;
 
-    const onUpload = (files: File[]) => {
-        const newRecord = { ...record };
-        const file = files.length && files[0];
+  const onUpload = (files: File[]) => {
+    const file = files.length && files[0];
+    if (onChange && record) {
+      const newRecord = { ...record };
+      onChange({
+        ...newRecord,
+        params: {
+          ...newRecord.params,
+          [property.name]: file,
+        },
+      });
+    }
+  };
 
-        onChange({
-            ...newRecord,
-            params: {
-                ...newRecord.params,
-                [property.name]: file,
-            },
-        });
-        event.preventDefault();
-    };
-
-    return (
-        <Box style={{ marginTop: 20, marginBottom: 20 }}>
-            <Label style={{ display: property.hideLabel ? 'none' : 'block' }}>{property.label}</Label>
-            <Label style={{ color: 'blue', fontSize: 11, display: property.props.info ? 'block' : 'none' }}>{property.props.info}</Label>
-            <DropZone
-                uploadLimitIn={'MB'}
-                validate={{ maxSize: Number(property.props?.maxSizeBytes), mimeTypes: property.props?.mimeTypes }}
-                multiple={property.props?.multiple}
-                onChange={onUpload}
-            />
-            <Label style={{ marginTop: 2, color: 'red', fontSize: 12, display: record.errors[property.name] ? 'block' : 'none' }}>
-                {record.errors[property.name] ? record.errors[property.name].message : ''}
-            </Label>
-        </Box>
-    );
+  return (
+    <Box style={{ marginTop: 20, marginBottom: 20 }}>
+      <Label style={{ display: property.hideLabel ? 'none' : 'block' }}>{property.label}</Label>
+      <Label
+        style={{ color: 'blue', fontSize: 11, display: property.props.info ? 'block' : 'none' }}
+      >
+        {property.props.info}
+      </Label>
+      <DropZone
+        uploadLimitIn={'MB'}
+        validate={{
+          maxSize: Number(property.props?.maxSizeBytes),
+          mimeTypes: property.props?.mimeTypes,
+        }}
+        multiple={property.props?.multiple}
+        onChange={onUpload}
+      />
+      <Label
+        style={{
+          marginTop: 2,
+          color: 'red',
+          fontSize: 12,
+          display: record?.errors[property.name] ? 'block' : 'none',
+        }}
+      >
+        {record?.errors[property.name] ? record.errors[property.name].message : ''}
+      </Label>
+    </Box>
+  );
 };
 export default UploadFile;

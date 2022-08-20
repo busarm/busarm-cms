@@ -137,20 +137,20 @@ export class AppAgent extends Model<AppAgentAttributes, AppAgentCreationAttribut
         ]
       },
       {
-        name: "agent_id",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "agent_id" },
-          { name: "partner_id" },
-        ]
-      },
-      {
         name: "user_id",
         unique: true,
         using: "BTREE",
         fields: [
           { name: "user_id" },
+        ]
+      },
+      {
+        name: "partner_id_2",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "partner_id" },
+          { name: "agent_id" },
         ]
       },
       {

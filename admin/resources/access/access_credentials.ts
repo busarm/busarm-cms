@@ -98,10 +98,10 @@ export const AccessCredentialsResource = (
                             ).toString();
                             const hash = CryptoJS.SHA256(
                                 request.payload.username +
-                                    ":" +
-                                    salt +
-                                    ":" +
-                                    request.payload.newPassword
+                                ":" +
+                                salt +
+                                ":" +
+                                request.payload.newPassword
                             ).toString();
                             request.payload.password = hash;
                             request.payload.salt = salt;
@@ -172,10 +172,10 @@ export const AccessCredentialsResource = (
                             ).toString();
                             const hash = CryptoJS.SHA256(
                                 request.payload.username +
-                                    ":" +
-                                    salt +
-                                    ":" +
-                                    request.payload.newPassword
+                                ":" +
+                                salt +
+                                ":" +
+                                request.payload.newPassword
                             ).toString();
                             request.payload.password = hash;
                             request.payload.salt = salt;
@@ -240,9 +240,7 @@ export const AccessCredentialsResource = (
                         }
                     ),
                     components: {
-                        filter: adminjs.bundle(
-                            "../../components/props/FilterText"
-                        ),
+                        filter: adminjs.bundle("../../components/props/FilterText"),
                     },
                     position: 122,
                 },
@@ -263,9 +261,7 @@ export const AccessCredentialsResource = (
                         }
                     ),
                     components: {
-                        filter: adminjs.bundle(
-                            "../../components/props/FilterText"
-                        ),
+                        filter: adminjs.bundle("../../components/props/FilterText")
                     },
                     position: 123,
                 },

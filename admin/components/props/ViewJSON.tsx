@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactJson, { InteractionProps } from 'react-json-view';
-import { BasePropertyProps } from 'adminjs';
+import { BasePropertyProps, ParamsType } from 'adminjs';
 import { Box, InputGroup, Label, Text } from '@adminjs/design-system';
 import Flat from 'flat';
 
@@ -13,19 +13,21 @@ const ViewJSON: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.El
   const { property, record, where, onChange } = props;
   const [editable]: [Boolean, Function] = useState(where === 'edit' && onChange !== null);
   const [data, setData]: [Object, Function] = useState(
-    Flat.unflatten(record.params)[property.name]
+    Flat.unflatten<ParamsType, ParamsType>(record?.params || {})[property.name]
   );
 
   const onEdit = (props: InteractionProps) => {
-    const newRecord = { ...record };
     if (editable) {
-      onChange({
-        ...newRecord,
-        params: {
-          ...newRecord.params,
-          [property.name]: Flat.flatten(props.updated_src),
-        },
-      });
+      if (onChange && record) {
+        const newRecord = { ...record };
+        onChange({
+          ...newRecord,
+          params: {
+            ...newRecord.params,
+            [property.name]: Flat.flatten<object, object>(props.updated_src || {}),
+          },
+        });
+      }
       setData(props.updated_src);
       return true;
     }
@@ -74,10 +76,10 @@ const ViewJSON: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.El
             marginTop: 2,
             color: 'red',
             fontSize: 12,
-            display: record.errors[property.name] ? 'block' : 'none',
+            display: record?.errors[property.name] ? 'block' : 'none',
           }}
         >
-          {record.errors[property.name] ? record.errors[property.name].message : ''}
+          {record?.errors[property.name] ? record.errors[property.name].message : ''}
         </Label>
       )}
     </Box>

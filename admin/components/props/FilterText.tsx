@@ -1,2 +1,2 @@
-import { filter } from 'adminjs/src/frontend/components/property-type/default-type';
-export default filter;
+import { BasePropertyComponent } from 'adminjs';
+export default BasePropertyComponent.DefaultType.Filter;

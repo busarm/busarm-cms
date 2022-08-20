@@ -1,2 +1,2 @@
-import { edit } from 'adminjs/src/frontend/components/property-type/default-type';
-export default edit;
+import { BasePropertyComponent } from 'adminjs';
+export default BasePropertyComponent.DefaultType.Edit;

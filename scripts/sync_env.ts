@@ -1,0 +1,1 @@
+// TODO Download envs from aws secret manager and create .env file

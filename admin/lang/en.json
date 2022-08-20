@@ -1,0 +1,8 @@
+{
+  "labels": {
+    "loginWelcome": "Welcome"
+  },
+  "messages": {
+    "requestFailed": "Failed to process request"
+  }
+}

@@ -128,7 +128,28 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
         ]
       },
       {
+        name: "agent_id",
+        using: "BTREE",
+        fields: [
+          { name: "agent_id" },
+        ]
+      },
+      {
         name: "partner_id",
+        using: "BTREE",
+        fields: [
+          { name: "partner_id" },
+        ]
+      },
+      {
+        name: "trip_id",
+        using: "BTREE",
+        fields: [
+          { name: "trip_id" },
+        ]
+      },
+      {
+        name: "partner_id_2",
         using: "BTREE",
         fields: [
           { name: "partner_id" },
@@ -144,18 +165,11 @@ export class TripBus extends Model<TripBusAttributes, TripBusCreationAttributes>
         ]
       },
       {
-        name: "trip_id",
+        name: "trip_id_2",
         using: "BTREE",
         fields: [
           { name: "trip_id" },
           { name: "bus_type_id" },
-          { name: "agent_id" },
-        ]
-      },
-      {
-        name: "agent_id",
-        using: "BTREE",
-        fields: [
           { name: "agent_id" },
         ]
       },

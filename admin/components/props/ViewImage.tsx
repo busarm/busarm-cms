@@ -1,6 +1,6 @@
 import Flat from 'flat';
 import React, { useState } from 'react';
-import { BasePropertyProps } from 'adminjs';
+import { BasePropertyProps, ParamsType } from 'adminjs';
 import { Box, Label } from '@adminjs/design-system';
 import ImageViewer from '../utils/ImageViewer';
 
@@ -13,7 +13,7 @@ import ImageViewer from '../utils/ImageViewer';
  */
 const ViewImage: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.Element => {
     const { property, where, record } = props;
-    const [data]: [String, Function] = useState(Flat.unflatten(record.params)[property.name]);
+    const [data]: [String, Function] = useState(Flat.unflatten<ParamsType, ParamsType>(record?.params || {})[property.name]);
 
     return (
         <Box style={{ marginTop: 20, marginBottom: 20 }}>
@@ -23,12 +23,12 @@ const ViewImage: React.FC<BasePropertyProps> = (props: BasePropertyProps): JSX.E
             )}
             <ImageViewer
                 src={data}
-                width={+props.property.props.width || null}
+                width={+props.property.props.width || undefined}
                 height={+props.property.props.height || 100}
             />
             {where === 'edit' && (
-                <Label style={{ marginTop: 2, color: 'red', fontSize: 12, display: record.errors[property.name] ? 'block' : 'none' }}>
-                    {record.errors[property.name] ? record.errors[property.name].message : ''}
+                <Label style={{ marginTop: 2, color: 'red', fontSize: 12, display: record?.errors[property.name] ? 'block' : 'none' }}>
+                    {record?.errors[property.name] ? record.errors[property.name].message : ''}
                 </Label>
             )}
         </Box>

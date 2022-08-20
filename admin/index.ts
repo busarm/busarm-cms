@@ -14,6 +14,7 @@ import { authenticate, checkAuth } from "./services/AuthService";
 import { checkAdmin, createAdmin } from "./services/AdminUserService";
 import { AccessRoles, RolePermissions } from "./helpers/roles";
 import { aceessAudit } from "./helpers/audit";
+import en from "./lang/en.json";
 
 // Register sequelize adapter to handle sequelize db
 AdminJS.registerAdapter(AdminJSSequelize);
@@ -122,7 +123,7 @@ export default async (path: string, app: Application): Promise<Application> => {
                 logo: config.url.logo,
                 favicon: config.url.favicon,
                 companyName: config.server.company,
-                softwareBrothers: false,
+                withMadeWithLove: false,
                 theme: {
                     colors: {
                         primary100: config.theme.primary || "",
@@ -140,10 +141,13 @@ export default async (path: string, app: Application): Promise<Application> => {
             locale: {
                 language: "en",
                 translations: {
+                    ...en,
                     labels: {
+                        ...en.labels,
                         loginWelcome: "Welcome",
                     },
                     messages: {
+                        ...en.messages,
                         loginWelcome: config.server.name,
                     },
                 },
