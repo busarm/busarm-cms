@@ -7,13 +7,15 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "sync:db": "npx ts-node \"./scripts/sync_db.ts\" ",
     "sync:env": "npx ts-node \"./scripts/sync_env.ts\" ",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "concurrently \"npm run watch\" \"nodemon -e ts,tsx,js,jsx,ejs,ts,json,html,css -i dist/** -i node_modules/** -i .adminjs/** server.ts\"",
+    "start": "npm run sync:env && npm run sync:db && npm run start:dev",
+    "sync:prod:db": "node \"./dist/scripts/sync_db.js\" ",
+    "sync:prod:env": "node \"./dist/scripts/sync_env.js\" ",
     "stop:prod": "pm2 stop cms-app 2> /dev/null",
-    "start": "node ./dist/server.js",
-    "start:prod": "pm2 start \"./dist/server.js\" --name cms-app",
-    "start:dev": "npm run sync:env && npm run sync:db && concurrently \"npm run watch\" \"nodemon -e ts,tsx,js,jsx,ejs,ts,json,html,css -i dist/** -i node_modules/** -i .adminjs/** server.ts\""
+    "start:prod": "pm2 start \"./dist/server.js\" --name cms-app"
   },
   "repository": {
     "type": "git",
