@@ -3,6 +3,7 @@
 *.idea/
 *__pycache__/
 
+null
 .env
 .logs/
 .serverless/

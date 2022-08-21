@@ -7,10 +7,13 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc --watch",
+    "sync:db": "npx ts-node \"./scripts/sync_db.ts\" ",
+    "sync:env": "npx ts-node \"./scripts/sync_env.ts\" ",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "stop:prod": "pm2 stop cms-app 2> /dev/null",
     "start": "node ./dist/server.js",
-    "start-prod": "pm2 start \"./dist/server.js\" --name cms-app",
-    "start-dev": "npx ts-node \"./scripts/sync_db.ts\" && concurrently \"npm run watch\" \"nodemon -e ts,tsx,js,jsx,ejs,ts,json,html,css -i dist/** -i node_modules/** -i .adminjs/** server.ts\""
+    "start:prod": "pm2 start \"./dist/server.js\" --name cms-app",
+    "start:dev": "npm run sync:env && npm run sync:db && concurrently \"npm run watch\" \"nodemon -e ts,tsx,js,jsx,ejs,ts,json,html,css -i dist/** -i node_modules/** -i .adminjs/** server.ts\""
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,7 @@
     "@types/styled-components": "^5.1.25",
     "adminjs": "^6.0.6",
     "app-root-path": "^3.1.0",
+    "aws-sdk": "^2.1199.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -36,6 +40,7 @@
     "fast-geoip": "^1.1.88",
     "flat": "^5.0.2",
     "helmet": "^5.1.1",
+    "minimist": "^1.2.6",
     "mysql2": "^2.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -55,6 +60,7 @@
     "@types/express-session": "^1.17.5",
     "@types/express-useragent": "^1.0.2",
     "@types/flat": "^5.0.2",
+    "@types/minimist": "^1.2.2",
     "@types/node": "^18.6.4",
     "concurrently": "^7.3.0",
     "nodemon": "^2.0.19",

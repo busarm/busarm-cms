@@ -1,0 +1,43 @@
+# AWS Codebuild project build specs
+version: 0.2
+env:
+  variables:
+    ENV: 'staging'
+    ENV_FILE: '.env'
+    DB_APP_NAME: app
+    DB_ACCESS_NAME: access
+    DB_OAUTH_NAME: oauth
+  secrets-manager:
+    DB_HOST: 'dev/busarm:db_host'
+    DB_PORT: 'dev/busarm:db_port'
+    DB_USER: 'dev/busarm:db_username'
+    DB_PASS: 'dev/busarm:db_password'
+    SESSION_SECRET: 'dev/busarm:cms_session_secret'
+    ADMIN_USERNAME: 'dev/busarm:cms_admin_user'
+    ADMIN_PASSWORD: 'dev/busarm:cms_admin_pass'
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - npm install
+  build:
+    commands:
+      # Sync env
+      - npm run sync:env -- --env=$ENV --out=$ENV_FILE --force
+      # Sync db
+      - npm run sync:db
+      # Build project
+      - npm run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - 'dist/**/*'
+    - .env
+    - .package.json
+  discard-paths: no
+cache:
+  paths:
+    - 'node_modules/**/*'
