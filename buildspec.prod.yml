@@ -29,16 +29,16 @@ phases:
       - npm run build
   post_build:
     commands:
-      - echo Copying neccesary file to dist
+      - echo Copying neccesary file to dist folder
       - cp .env ./dist/.env
       - cp .npmrc ./dist/.npmrc
-      - cp appspec.yml ./dist/appspec.yml
       - cp package.json ./dist/package.json
       - echo Build completed on `date`
 artifacts:
   files:
     - 'dist/**/*'
     - 'scripts/**/*'
+    - 'appspec.yml'
   discard-paths: no
 cache:
   paths:
