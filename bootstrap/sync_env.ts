@@ -64,14 +64,15 @@ const mergeSecretEnvs = (secrets: {
         DB_ACCESS_PASSWORD: secrets.db_password,
         DB_ACCESS_NAME: secrets.db_access_name,
 
-
         DB_OAUTH_HOST: secrets.db_host,
         DB_OAUTH_PORT: secrets.db_port,
         DB_OAUTH_USERNAME: secrets.db_username,
         DB_OAUTH_PASSWORD: secrets.db_password,
         DB_OAUTH_NAME: secrets.db_oauth_name,
 
-        SESSION_SECRET: secrets.cms_session_secret
+        SESSION_SECRET: secrets.cms_session_secret,
+        ADMIN_DEFAULT_USERNAME: secrets.cms_admin_user,
+        ADMIN_DEFAULT_PASSWORD: secrets.cms_admin_pass,
     }
 }
 

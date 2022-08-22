@@ -4,4 +4,5 @@
 set -m
 
 echo "Sync db"
+cd /var/www
 npm run sync:prod:db
