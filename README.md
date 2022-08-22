@@ -48,3 +48,25 @@ $ npm run sync:env
 # Start - Development
 
 - Run `npm run start`
+
+# Deployment With Code Deploy (Production / Staging)
+
+- Set up EC2
+  - Create EC2 Deploy Service Role for EC2
+    - Add Read Secret Manager permission to EC2 Service Role - to get application secrets
+    - Add Read & Put S3 permission to EC2 Service Role - to download application data
+    - Add other permissions needed for the app
+  - If not using Auto Scaling Groups, add Custom Code Deploy Tag to EC2 Tags - to be use in Code Deploy Deployment Group
+  - Install Code deploy agent in EC2 - to interact with AWS Code Deploy
+    - Using SSM - Add System Manager permissions to EC2 Service Role
+- Create Code Deploy Application
+  - Add Deployment Group
+    - If not using Auto Scaling Groups, deploy to instances with the specified tags, else deploy to auto scaling group
+  - Create Code Deploy Service Role for Deployment Group
+    - Add EC2 Full access permmission
+    - Add Read Secret Manager permission to EC2 Service Role - to get application secrets
+    - Add Read & Put S3 permission to EC2 Service Role - to download application data
+- Set up AWS CICD Pipeline
+  - Source - GIT HUB or Any
+  - Build - Code build
+  - Deploy - Code deploy

@@ -1,7 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /
+  # Extract files from `dist` folder to `/var/www` on the instance
+  - source: dist
     destination: /var/www/
 hooks:
   BeforeInstall:

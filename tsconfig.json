@@ -101,8 +101,8 @@
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
   },
   "exclude": [
-    // "./admin/components/**/*",
     "./node_modules/**/*",
-    "./dist/**/*"
+    "./dist/**/*",
+    "./package.json"
   ]
 }
