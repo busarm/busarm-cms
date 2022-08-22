@@ -19,12 +19,15 @@
 - `/admin/resource.ts` - Defines Default AdminJS resource & navigation configs
 - `/admin/permissions.ts` - Defines System Permissions
 - `/admin/index.ts` - Setup AdminJS
+- `/bootstrap` - Files needed to setup application
 - `/configs` - Application configurations
 - `/models` - Database models
-- `/public` - Public downloadabe resources
+- `/public` - Publicly accessible resources
 - `/scripts` - Custom scripts for specific actions
 - `server.ts` - Initialize server
-- `.env.example` - Sample environment vars to be copied to `.env`
+- `.env.json` - Default environment vars to be copied to `.env`
+- `.env.stg.json` - Default Staging environment vars to be copied to `.env`
+- `.env.prod.json` - Default production environment vars to be copied to `.env`
 
 # Set up
 
@@ -32,16 +35,16 @@
 # install packages
 $ npm install
 
-# create env file
-$ cp .env.example .env
+# sync env to generate .env file
+$ npm run sync:env
 ```
 
 - Set the environment variable `ADMIN_DEFAULT_USERNAME` in the '.env' file. e.g `ADMIN_DEFAULT_USERNAME="blahblah1"`
 - Set the environment variable `ADMIN_DEFAULT_PASSWORD` in the '.env' file. e.g `DEFAULT_ADMIN_PASSWORD="blah12345!"`
 - Set the environment variable `SESSION_SECRET` in the '.env' file. Random key of about 512 bits or 64 bytes
-- Set Database Credentials in `.env` file.
+- Set Database Credentials (`DB_*`) in `.env` file.
 - Set Other values in `.env` file.
 
 # Start - Development
 
-- Run `npm run start-dev`
+- Run `npm run start`
