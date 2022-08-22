@@ -6,13 +6,13 @@ files:
     destination: /var/www/
 hooks:
   BeforeInstall:
-    - location: scripts/1-install.sh
+    - location: dist/scripts/1-install.sh
       timeout: 300
       runas: root
   AfterInstall:
-    - location: scripts/2-setup.sh
+    - location: dist/scripts/2-setup.sh
       timeout: 300
       runas: root
   ApplicationStart:
-    - location: scripts/3-startup.sh
+    - location: dist/scripts/3-startup.sh
       timeout: 300
