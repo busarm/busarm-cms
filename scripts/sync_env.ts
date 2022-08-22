@@ -3,7 +3,7 @@ import minimist from "minimist";
 import envs from "../env.json";
 import stgEnvs from "../env.stg.json";
 import prodEnvs from "../env.prod.json";
-import secrets from "../configs/secrets";
+import secrets from "../bootstrap/secrets";
 
 // Defined command Args
 const ARG_ENV = "env";
