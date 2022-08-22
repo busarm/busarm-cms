@@ -38,6 +38,7 @@ phases:
 artifacts:
   files:
     - 'dist/**/*'
+    - 'scripts/**/*'
   discard-paths: no
 cache:
   paths:
