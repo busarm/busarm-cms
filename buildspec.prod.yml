@@ -32,9 +32,12 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - 'dist/**/*'
+    - 'dist/*'
     - .env
-  discard-paths: yes
+    - .npmrc
+    - appspec.yml
+  discard-paths: yes # Expand paths and deploy in same directory. e.g dist/* will deploy to /*
+
 cache:
   paths:
     - 'node_modules/**/*'
