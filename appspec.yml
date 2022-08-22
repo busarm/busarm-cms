@@ -5,12 +5,18 @@ files:
   - source: dist
     destination: /var/www/
 file_exists_behavior: OVERWRITE
+permissions:
+  - object: /var/www
+    pattern: '*'
+    mode: 755
+    type:
+      - file
+      - directory
 hooks:
   # BeforeInstall:
   AfterInstall:
     - location: scripts/0-pre-install.sh
       timeout: 300
-      runas: root
     - location: scripts/1-install.sh
       timeout: 300
     - location: scripts/2-setup.sh
