@@ -19,5 +19,5 @@ hooks:
       timeout: 300
       runas: root
   ApplicationStart:
-    - location: scripts/3-startup.sh
+    - location: scripts/3-start.sh
       timeout: 300
