@@ -33,6 +33,8 @@ phases:
       - cp .env ./dist/.env
       - cp .npmrc ./dist/.npmrc
       - cp package.json ./dist/package.json
+      - echo Build dist without dev dependencies
+      - cd dist && npm install --omit=dev
       - echo Build completed on `date`
 artifacts:
   files:

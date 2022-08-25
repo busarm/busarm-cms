@@ -15,9 +15,6 @@ permissions:
 hooks:
   # BeforeInstall:
   AfterInstall:
-    - location: scripts/1-install.sh
-      timeout: 300
-      runas: root
     - location: scripts/2-setup.sh
       timeout: 300
       runas: root

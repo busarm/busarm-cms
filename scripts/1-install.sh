@@ -3,6 +3,11 @@
 # Turn on bash's job control
 set -m
 
-echo "Installing npm packages"
-cd /var/www
-npm install --omit=dev
+echo "Installing nodejs - Download installer"
+curl -sL https://rpm.nodesource.com/setup_16.x | bash
+
+echo "Installing nodejs - Install nodejs"
+yum install -y nodejs
+
+echo "Installing pm2"
+npm i -g pm2
