@@ -4,6 +4,7 @@ import envs from "../env.json";
 import stgEnvs from "../env.stg.json";
 import prodEnvs from "../env.prod.json";
 import secrets from "./secrets";
+import { ENV } from "../configs/app";
 
 // Defined command Args
 const ARG_ENV = "env";
@@ -17,7 +18,7 @@ const ARG_FORCE_SC = "f";
 const args = minimist(process.argv.slice(2))
 
 // Define args vars
-const environment = args[ARG_ENV] || 'local';
+const environment = args[ARG_ENV] || ENV.LOCAL;
 const outPath = args[ARG_OUT] || '.env';
 const forceSync = Boolean(args[ARG_FORCE] || args[ARG_FORCE_SC] || false);
 
@@ -44,6 +45,7 @@ const mergeSecretEnvs = (secrets: {
     db_port: string,
     db_username: string,
     db_password: string,
+    cms_app_token: string,
     cms_session_secret: string,
     cms_admin_user: string,
     cms_admin_pass: string,
@@ -70,6 +72,7 @@ const mergeSecretEnvs = (secrets: {
         DB_OAUTH_PASSWORD: secrets.db_password,
         DB_OAUTH_NAME: secrets.db_oauth_name,
 
+        APP_TOKEN: secrets.cms_app_token,
         SESSION_SECRET: secrets.cms_session_secret,
         ADMIN_DEFAULT_USERNAME: secrets.cms_admin_user,
         ADMIN_DEFAULT_PASSWORD: secrets.cms_admin_pass,
@@ -113,8 +116,7 @@ if (environment == 'local') {
         .then((done) => {
             if (done) console.log("Completed syncing env");
             else throw "Failed to save env file";
-        })
-        .catch(console.log);
+        });
 }
 
 // Staging or Dev or Production environment - process if options available
@@ -130,16 +132,17 @@ else {
             db_port: process.env.DB_PORT,
             db_username: process.env.DB_USER,
             db_password: process.env.DB_PASS,
+            cms_app_token: process.env.APP_TOKEN,
             cms_session_secret: process.env.SESSION_SECRET,
             cms_admin_user: process.env.ADMIN_USERNAME,
             cms_admin_pass: process.env.ADMIN_PASSWORD,
         }, {
             ...envs,
-            ...(environment == 'production' ? prodEnvs : (environment == 'staging' || environment == 'development') ? stgEnvs : {})
+            ...(environment == ENV.PROD ? prodEnvs : (environment == ENV.STG || environment == 'development') ? stgEnvs : {})
         })).then((done) => {
             if (done) console.log("Completed syncing env");
             else throw "Failed to save env file";
-        }).catch(console.log);
+        });
     }
 
     // If AWS Secret Manager ID available
@@ -148,13 +151,15 @@ else {
             .then(async (data) => {
                 const done = await saveEnv(outPath, mergeSecretEnvs(Object(data), {
                     ...envs,
-                    ...(environment == 'production' ? prodEnvs : (environment == 'staging' || environment == 'development') ? stgEnvs : {})
+                    ...(environment == ENV.PROD ? prodEnvs : (environment == ENV.STG || environment == 'development') ? stgEnvs : {})
                 }))
                 if (done) console.log("Completed syncing env");
                 else throw "Failed to save env file";
-            })
-            .catch(console.log)
+            });
     }
 
-    else console.log(`Expected options: '--${ARG_SECRET}' and '--${ARG_REGION}'`);
+    else {
+        console.error(`Expected options: '--${ARG_SECRET}' and '--${ARG_REGION}'`);
+        process.exit(1)
+    };
 }

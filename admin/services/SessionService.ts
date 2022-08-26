@@ -33,7 +33,7 @@ export const createExpressSession = async (
         lat: geo?.ll ? geo.ll[0] : 0,
         lng: geo?.ll ? geo.ll[1] : 0,
         lastAccess: new Date(),
-        isLive: config.env === ENV.PROD || config.env === ENV.TEST ? 1 : 0,
+        isLive: config.env === ENV.PROD || config.env === ENV.STG ? 1 : 0,
     }, { hooks: false }).then(([access, created]) => {
         if (access && !created) {
             return Models.access.AccessLog.findOne({ where: { sessionToken: sid } });

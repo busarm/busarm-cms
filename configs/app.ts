@@ -1,7 +1,7 @@
 import pkg from '../package.json';
 export enum ENV {
     PROD = "production",
-    TEST = "testing",
+    STG = "staging",
     DEV = "development",
     LOCAL = "local",
 }
@@ -12,8 +12,8 @@ export enum ENV {
 function getEnv(): ENV {
     if (process.env.NODE_ENV == ENV.PROD || process.env.ENV == ENV.PROD) {
         return ENV.PROD;
-    } else if (process.env.NODE_ENV == ENV.TEST || process.env.ENV == ENV.TEST) {
-        return ENV.TEST;
+    } else if (process.env.NODE_ENV == ENV.STG || process.env.ENV == ENV.STG) {
+        return ENV.STG;
     } else if (process.env.NODE_ENV == ENV.DEV || process.env.ENV == ENV.DEV) {
         return ENV.DEV;
     } else {
@@ -27,6 +27,7 @@ export default {
         name: process.env.APP_NAME || "CMS APP",
         company: process.env.APP_COMPANY || "CMS",
         port: Number(process.env.APP_PORT) || 80,
+        token: process.env.APP_TOKEN
     },
     session: {
         secret: process.env.SESSION_SECRET || "cms@admin1!",

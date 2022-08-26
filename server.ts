@@ -6,7 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import admin from "./admin";
-import config from "./configs/app";
+import config, { ENV } from "./configs/app";
 import { aceessSession } from "./admin/helpers/session";
 
 // Init Express
@@ -23,8 +23,22 @@ app.use(cookieParser(config.session.secret));
 app.use(aceessSession());
 app.use(express.static("public")); // Serve static files from /public
 
+// Add server token authorization
+// This is to prevent direct access to the server via IP but only through the proxy server.
+// Token header (server-token or api-key) is placed in the http proxy server. e.g AWS ELB, AWS Cloudfront
+app.use('/*', (req, res, next) => {
+    if (config.env !== ENV.LOCAL && config.env !== ENV.DEV && config.server.token) {
+        let token = req.header('server-token') || req.header('api-key');
+        if (token !== config.server.token) {
+            res.status(401).send('Unauthorized')
+        }
+        else next();
+    }
+    else next();
+})
+
 // Add route middleware to prevent caching admin API in browser, which could lead to issues
-app.use("/api/*", function (_, res, next) {
+app.use("/api/*", (_, res, next) => {
     res.header("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
     res.header("Pragma", "no-cache"); // HTTP 1.0.
     res.header("Expires", "0"); // Proxies.

@@ -12,6 +12,7 @@ env:
     DB_PORT: 'prod/busarm:db_port'
     DB_USER: 'prod/busarm:db_username'
     DB_PASS: 'prod/busarm:db_password'
+    APP_TOKEN: 'dev/busarm:cms_app_token'
     SESSION_SECRET: 'prod/busarm:cms_session_secret'
     ADMIN_USERNAME: 'prod/busarm:cms_admin_user'
     ADMIN_PASSWORD: 'prod/busarm:cms_admin_pass'
